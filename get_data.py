@@ -11,6 +11,8 @@ import shutil
 import zipfile
 from glob import glob
 from typing import List, Tuple
+import pandas as pd
+from glob import glob
 
 import click
 import h5py
@@ -23,7 +25,7 @@ from scipy.ndimage import gaussian_filter
 
 @click.command()
 @click.option('--dataset',
-              type=click.Choice(['cell', 'mall', 'ucsd']),
+              type=click.Choice(['cell', 'mall', 'ucsd', 'visdrone']),
               required=True)
 def get_data(dataset: str):
     """
@@ -34,7 +36,8 @@ def get_data(dataset: str):
     {
         'cell': generate_cell_data,
         'mall': generate_mall_data,
-        'ucsd': generate_ucsd_data
+        'ucsd': generate_ucsd_data,
+        'visdrone': generate_visdrone_data
     }[dataset]()
 
 
@@ -236,6 +239,66 @@ def generate_mall_data():
 
     # cleanup
     shutil.rmtree('mall_dataset')
+
+def generate_visdrone_data():
+    """Generate HDF5 files for mall dataset."""
+    # download and extract dataset
+
+    bpath = '../VisDrone2020-CC/'
+
+    with open(bpath + 'trainlist.txt') as f:
+        train_list = sorted(f.read().split('\n'))
+
+    test_list = train_list[66:]
+    train_list = train_list[:66]
+
+    train_size = sum([len(glob(bpath + f'sequences/{l}/*')) for l in train_list])
+    test_size = sum([len(glob(bpath + f'sequences/{l}/*')) for l in test_list])
+    
+    # create training and validation HDF5 files
+    train_h5, valid_h5 = create_hdf5('visdrone',
+                                     train_size=train_size,
+                                     valid_size=test_size,
+                                     img_size=(480, 640),
+                                     in_channels=3)
+
+    def fill_h5(h5, labels, init_frame=0):
+        """
+        Save images and labels in given HDF5 file.
+
+        Args:
+            h5: HDF5 file
+            labels: the list of labels
+            init_frame: the first frame in given list of labels
+        """
+        i = init_frame
+        for seq in labels:
+            df_lab = pd.read_csv(bpath + f'annotations/{seq}.txt', names=['img', 'x', 'y'])
+
+            for path in glob(bpath + f'sequences/{seq}/*'):
+                # get an image as numpy array
+                image = np.array(Image.open(path).resize((640,480)), dtype=np.float32) / 255
+                image = np.transpose(image, (2, 0, 1))
+
+                loc = df_lab[df_lab==int(path.split('/')[-1].split('.')[0])]
+
+                # generate a density map by applying a Gaussian filter
+                label = generate_label(loc[loc.img==1][['x','y']].values, image.shape[1:])
+
+                # save data to HDF5 file
+                h5['images'][i - init_frame] = image
+                h5['labels'][i - init_frame, 0] = label
+
+                i+=1
+
+    # use first 1500 frames for training and the last 500 for validation
+    fill_h5(train_h5, train_list)
+    fill_h5(valid_h5, test_list, train_size)
+
+    # close HDF5 file
+    train_h5.close()
+    valid_h5.close()
+
 
 
 def generate_cell_data():
