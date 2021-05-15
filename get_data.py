@@ -93,11 +93,11 @@ def generate_label(label_info: np.array, image_shape: List[int]):
     # create an empty density map
     label = np.zeros(image_shape, dtype=np.float32)
 
-    # loop over objects positions and marked them with 100 on a label
+    # loop over objects positions and marked them with 400 on a label
     # note: *_ because some datasets contain more info except x, y coordinates
     for x, y, *_ in label_info:
         if y < image_shape[0] and x < image_shape[1]:
-            label[int(y)][int(x)] = 100
+            label[int(y)][int(x)] = 400
 
     # apply a convolution with a Gaussian kernel
     label = gaussian_filter(label, sigma=(1, 1), order=0)
@@ -275,12 +275,17 @@ def generate_visdrone_data():
         for seq in labels:
             df_lab = pd.read_csv(bpath + f'annotations/{seq}.txt', names=['img', 'x', 'y'])
 
-            for path in glob(bpath + f'sequences/{seq}/*'):
+            for path in sorted(glob(bpath + f'sequences/{seq}/*')):
                 # get an image as numpy array
-                image = np.array(Image.open(path).resize((640,480)), dtype=np.float32) / 255
+                image = Image.open(path)
+                x, y = image.size
+                
+                image = np.array(image.resize((640,480)), dtype=np.float32) / 255
                 image = np.transpose(image, (2, 0, 1))
 
-                loc = df_lab[df_lab==int(path.split('/')[-1].split('.')[0])]
+                loc = df_lab[df_lab.img==int(path.split('/')[-1].split('.')[0])]
+                loc.loc[:,'x'] = (loc.loc[:,'x']*640/x).astype(np.int32)
+                loc.loc[:,'y'] = (loc.loc[:,'y']*480/y).astype(np.int32)
 
                 # generate a density map by applying a Gaussian filter
                 label = generate_label(loc[loc.img==1][['x','y']].values, image.shape[1:])
@@ -293,7 +298,7 @@ def generate_visdrone_data():
 
     # use first 1500 frames for training and the last 500 for validation
     fill_h5(train_h5, train_list)
-    fill_h5(valid_h5, test_list, train_size)
+    fill_h5(valid_h5, test_list)
 
     # close HDF5 file
     train_h5.close()

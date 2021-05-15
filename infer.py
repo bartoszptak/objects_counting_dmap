@@ -93,7 +93,7 @@ def infer(image_path: str,
     density_map = network(TF.to_tensor(img).unsqueeze_(0))
 
     # note: density maps were normalized to 100 * no. of objects
-    n_objects = torch.sum(density_map).item() / 100
+    n_objects = torch.sum(density_map).item() / 400
 
     print(f"The number of objects found: {n_objects}")
 
