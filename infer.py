@@ -123,6 +123,9 @@ def _visualize(img, dmap):
     # display an image with density map put on top of it
     Image.alpha_composite(img.convert('RGBA'), dmap.resize(img.size)).show()
 
+    plt.imshow(dmap)
+    plt.show()
+
 
 if __name__ == "__main__":
     infer()

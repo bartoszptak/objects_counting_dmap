@@ -35,6 +35,11 @@ from model import UNet, FCRN_A
 @click.option('--convolutions', default=2,
               help='Number of layers in a convolutional block.')
 @click.option('--plot', is_flag=True, help="Generate a live plot.")
+@click.option('-c', '--checkpoint',
+              type=click.File('r'),
+              required=False,
+              default=None,
+              help='A path to a checkpoint with weights.')
 def train(dataset_name: str,
           network_architecture: str,
           learning_rate: float,
@@ -44,6 +49,7 @@ def train(dataset_name: str,
           vertical_flip: float,
           unet_filters: int,
           convolutions: int,
+          checkpoint: str,
           plot: bool):
     """Train chosen model on selected dataset."""
     # use GPU if avilable
@@ -73,6 +79,9 @@ def train(dataset_name: str,
                             filters=unet_filters,
                             N=convolutions).to(device)
     network = torch.nn.DataParallel(network)
+
+    if checkpoint:
+        network.load_state_dict(torch.load(checkpoint.name, map_location=torch.device('cpu')))
 
     # initialize loss, optimized and learning rate scheduler
     loss = torch.nn.MSELoss()
