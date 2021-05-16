@@ -81,7 +81,7 @@ def train(dataset_name: str,
     network = torch.nn.DataParallel(network)
 
     if checkpoint:
-        network.load_state_dict(torch.load(checkpoint.name, map_location=torch.device('cpu')))
+        network.load_state_dict(torch.load(checkpoint.name))
 
     # initialize loss, optimized and learning rate scheduler
     loss = torch.nn.MSELoss()
