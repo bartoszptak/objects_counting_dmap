@@ -83,6 +83,8 @@ def train(dataset_name: str,
 
     elif network_architecture[:5] == 'UNet_':
         network = smp.Unet(encoder_name=network_architecture.split('_')[-1], in_channels=3, classes=1) 
+    elif network_architecture[:7] == 'UNet++_':
+        network = smp.UnetPlusPlus(encoder_name=network_architecture.split('_')[-1], in_channels=3, classes=1) 
     else:
         raise NotImplementedError
 
