@@ -97,7 +97,7 @@ def generate_label(label_info: np.array, image_shape: List[int]):
     # note: *_ because some datasets contain more info except x, y coordinates
     for x, y, *_ in label_info:
         if y < image_shape[0] and x < image_shape[1]:
-            label[int(y)][int(x)] = 400
+            label[int(y)][int(x)] = 100
 
     # apply a convolution with a Gaussian kernel
     label = gaussian_filter(label, sigma=(1, 1), order=0)
@@ -259,7 +259,7 @@ def generate_visdrone_data():
     train_h5, valid_h5 = create_hdf5('visdrone',
                                      train_size=train_size,
                                      valid_size=test_size,
-                                     img_size=(480, 640),
+                                     img_size=(608, 608),
                                      in_channels=3)
 
     def fill_h5(h5, labels, init_frame=0):
@@ -280,12 +280,12 @@ def generate_visdrone_data():
                 image = Image.open(path)
                 x, y = image.size
                 
-                image = np.array(image.resize((640,480)), dtype=np.float32) / 255
+                image = np.array(image.resize((608,608)), dtype=np.float32) / 255
                 image = np.transpose(image, (2, 0, 1))
 
                 loc = df_lab[df_lab.img==int(path.split('/')[-1].split('.')[0])]
-                loc.loc[:,'x'] = (loc.loc[:,'x']*640/x).astype(np.int32)
-                loc.loc[:,'y'] = (loc.loc[:,'y']*480/y).astype(np.int32)
+                loc.loc[:,'x'] = (loc.loc[:,'x']*608/x).astype(np.int32)
+                loc.loc[:,'y'] = (loc.loc[:,'y']*608/y).astype(np.int32)
 
                 # generate a density map by applying a Gaussian filter
                 label = generate_label(loc[loc.img==1][['x','y']].values, image.shape[1:])
