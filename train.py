@@ -6,6 +6,7 @@ import click
 import torch
 import numpy as np
 from matplotlib import pyplot
+import segmentation_models_pytorch as smp
 
 from data_loader import H5Dataset
 from looper import Looper
@@ -18,7 +19,6 @@ from model import UNet, FCRN_A
               required=True,
               help='Dataset to train model on (expect proper HDF5 files).')
 @click.option('-n', '--network_architecture',
-              type=click.Choice(['UNet', 'FCRN_A']),
               required=True,
               help='Model to train.')
 @click.option('-lr', '--learning_rate', default=1e-2,
@@ -72,13 +72,21 @@ def train(dataset_name: str,
     input_channels = 1 if dataset_name == 'ucsd' else 3
 
     # initialize a model based on chosen network_architecture
-    network = {
-        'UNet': UNet,
-        'FCRN_A': FCRN_A
-    }[network_architecture](input_filters=input_channels,
-                            filters=unet_filters,
-                            N=convolutions).to(device)
-    network = torch.nn.DataParallel(network)
+
+    if network_architecture in ['UNet', 'FCRN_A']:
+        network = {
+            'UNet': UNet,
+            'FCRN_A': FCRN_A
+        }[network_architecture](input_filters=input_channels,
+                                filters=unet_filters,
+                                N=convolutions)
+
+    elif network_architecture[:5] == 'UNet_':
+        network = smp.Unet(encoder_name=network_architecture.split('_')[-1], in_channels=3, classes=1) 
+    else:
+        raise NotImplementedError
+
+    network = torch.nn.DataParallel(network.to(device))
 
     if checkpoint:
         network.load_state_dict(torch.load(checkpoint.name))
