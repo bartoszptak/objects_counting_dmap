@@ -283,19 +283,21 @@ def generate_visdrone_data():
                 image = np.array(image.resize((608,608)), dtype=np.float32) / 255
                 image = np.transpose(image, (2, 0, 1))
 
-                loc = df_lab[df_lab.img==int(path.split('/')[-1].split('.')[0])]
-                loc.loc[:,'x'] = (loc.loc[:,'x']*608/x).astype(np.int32)
-                loc.loc[:,'y'] = (loc.loc[:,'y']*608/y).astype(np.int32)
+                index = int(path.split('/')[-1].split('.')[0])
+                loc = df_lab[df_lab.img==index]
+
+                loc.loc[:, 'x'] *=608/x
+                loc.loc[:, 'y'] *=608/y
 
                 # generate a density map by applying a Gaussian filter
-                label = generate_label(loc[loc.img==1][['x','y']].values, image.shape[1:])
+                label = generate_label(loc[loc.img==index][['x','y']].values, image.shape[1:])
 
                 # save data to HDF5 file
                 h5['images'][i - init_frame] = image
                 h5['labels'][i - init_frame, 0] = label
 
                 i+=1
-
+         
     # use first 1500 frames for training and the last 500 for validation
     fill_h5(train_h5, train_list)
     fill_h5(valid_h5, test_list)
