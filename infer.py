@@ -80,10 +80,10 @@ def infer(image_path: str,
     # load provided state dictionary
     # note: by default train.py saves the model in data parallel mode
     network = torch.nn.DataParallel(network)
-    network.load_state_dict(torch.load(checkpoint.name))
+    network.load_state_dict(torch.load(checkpoint.name, map_location=torch.device('cpu')))
     network.eval()
 
-    img = Image.open(image_path.name)
+    img = Image.open(image_path.name).resize((608,608))
 
     # padding was applied for ucsd images to allow down and upsampling
     if pad:
@@ -93,7 +93,7 @@ def infer(image_path: str,
     density_map = network(TF.to_tensor(img).unsqueeze_(0))
 
     # note: density maps were normalized to 100 * no. of objects
-    n_objects = torch.sum(density_map).item() / 400
+    n_objects = torch.sum(density_map).item()/100
 
     print(f"The number of objects found: {n_objects}")
 
@@ -102,6 +102,10 @@ def infer(image_path: str,
 
 
 def _visualize(img, dmap):
+
+    plt.imshow(dmap)
+    plt.show()
+
     """Draw a density map onto the image."""
     # keep the same aspect ratio as an input image
     fig, ax = plt.subplots(figsize=figaspect(1.0 * img.size[1] / img.size[0]))
@@ -123,8 +127,7 @@ def _visualize(img, dmap):
     # display an image with density map put on top of it
     Image.alpha_composite(img.convert('RGBA'), dmap.resize(img.size)).show()
 
-    plt.imshow(dmap)
-    plt.show()
+    
 
 
 if __name__ == "__main__":
