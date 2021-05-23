@@ -67,11 +67,11 @@ class Looper():
 
             # get model prediction (a density map)
             result = self.network(image)
-
+                        
             # calculate loss and update running loss
             loss = self.loss(result, label)
             self.running_loss[-1] += image.shape[0] * loss.item() / self.size
-
+            #print(loss, image.shape[0] * loss.item() / self.size)
             # update weights if in train mode
             if not self.validation:
                 loss.backward()
