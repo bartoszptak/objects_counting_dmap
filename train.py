@@ -82,13 +82,13 @@ def train(dataset_name: str,
                                 N=convolutions)
 
     elif network_architecture[:5] == 'UNet_':
-        network = smp.Unet(encoder_name=network_architecture.split('_')[-1], in_channels=3, classes=1, encoder_weights=None) 
+        network = smp.Unet(encoder_name=network_architecture.split('_')[-1], in_channels=3, classes=1) 
     elif network_architecture[:7] == 'UNet++_':
-        network = smp.UnetPlusPlus(encoder_name=network_architecture.split('_')[-1], in_channels=3, classes=1, encoder_weights=None) 
+        network = smp.UnetPlusPlus(encoder_name=network_architecture.split('_')[-1], in_channels=3, classes=1) 
     elif network_architecture[:4] == 'FPN_':
         network = smp.FPN(encoder_name=network_architecture.split('_')[-1], in_channels=3, classes=1) 
     elif network_architecture[:4] == 'PSP_':
-        network = smp.PSPNet(encoder_name=network_architecture.split('_')[-1], in_channels=3, classes=1, encoder_weights=None)
+        network = smp.PSPNet(encoder_name=network_architecture.split('_')[-1], in_channels=3, classes=1)
     else:
         raise NotImplementedError
 
