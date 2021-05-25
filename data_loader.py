@@ -1,57 +1,135 @@
 """PyTorch dataset for HDF5 files generated with `get_data.py`."""
 import os
-from random import random
+import random
 from typing import Optional
 
 import h5py
 import torch
 import numpy as np
 from torch.utils.data import Dataset, DataLoader
-
+import albumentations as A
+from scipy.ndimage import gaussian_filter
 
 class H5Dataset(Dataset):
     """PyTorch dataset for HDF5 files generated with `get_data.py`."""
 
     def __init__(self,
                  dataset_path: str,
-                 horizontal_flip: float=0.0,
-                 vertical_flip: float=0.0):
+                 aug: bool = False,
+                 mosaic: bool = False):
         """
         Initialize flips probabilities and pointers to a HDF5 file.
 
         Args:
             dataset_path: a path to a HDF5 file
-            horizontal_flip: the probability of applying horizontal flip
-            vertical_flip: the probability of applying vertical flip
+            
         """
         super(H5Dataset, self).__init__()
         self.h5 = h5py.File(dataset_path, 'r')
         self.images = self.h5['images']
         self.labels = self.h5['labels']
-        self.horizontal_flip = horizontal_flip
-        self.vertical_flip = vertical_flip
+        self.aug = aug
+        self.mosaic = mosaic
+
+        if self.aug:
+            self.seq = A.Compose([
+                A.HorizontalFlip(p=1),
+                A.RandomBrightnessContrast(p=1),    
+                A.RandomGamma(p=1),
+                A.OneOf([
+                    A.Compose([
+                        # A.RandomScale([-0.2, -0.4], always_apply=True),
+                        A.RandomCrop(width=608, height=608, always_apply=True),
+                    ]),
+                    A.Compose([
+                        # A.RandomScale([0.0, -0.2], always_apply=True),
+                        A.Resize(608, 608, always_apply=True)
+                    ])
+                    
+                ], p=1)
+            ])
+        else:
+            self.resize = A.Resize(608, 608, always_apply=True)
 
     def __len__(self):
         """Return no. of samples in HDF5 file."""
         return len(self.images)
 
+    def load_image(self, index: int):
+        img, label = self.images[index], self.labels[index]
+
+        if self.aug:
+            transformed = self.seq(image=img, mask=label)
+        else:
+            transformed = self.resize(image=img, mask=label)
+
+        # print(f'{label.sum()} : {transformed["mask"].sum()}')
+
+        img, label = transformed["image"], transformed["mask"]
+
+        return img, label
+
     def __getitem__(self, index: int):
         """Return next sample (randomly flipped)."""
         # if both flips probabilities are zero return an image and a label
-        if not (self.horizontal_flip or self.vertical_flip):
-            return self.images[index], self.labels[index]
+                
 
-        # axis = 1 (vertical flip), axis = 2 (horizontal flip)
-        axis_to_flip = []
+        if self.mosaic:
+            img, label = self.load_mosaic(index=index)
+        else:
+            img, label = self.load_image(index=index)
+        
+        # import matplotlib.pyplot as plt
+        # fig, ax = plt.subplots(1, 2, figsize=(18,10))
+        # ax[0].imshow(img)
+        # ax[1].imshow(label)
+        # plt.show()
 
-        if random() < self.vertical_flip:
-            axis_to_flip.append(1)
+        return img.transpose((2,0,1)), label.transpose((2,0,1))
+        
 
-        if random() < self.horizontal_flip:
-            axis_to_flip.append(2)
+    def load_mosaic(self, index: int):
+        s = 608
+        xc, yc = [int(random.uniform(s * 0.25, s * 0.75)) for _ in range(2)]
+        indices = [index] + [random.randint(0, len(self.labels) - 1) for _ in range(3)]
 
-        return (np.flip(self.images[index], axis=axis_to_flip).copy(),
-                np.flip(self.labels[index], axis=axis_to_flip).copy())
+        img4 = np.empty((s, s, 3), dtype=np.float32)
+        labels4 = np.empty((s, s, 1), dtype=np.float32)
+
+        masks = []
+
+        for i, idx in enumerate(indices):
+            img, lab = self.load_image(idx)
+
+            if i == 0:  # top left
+                xo, yo = int(random.uniform(0, s-xc)), int(random.uniform(0, s-yc))
+                img4[:yc,:xc,:]    = img[yo:yo+yc,xo:xo+xc,:]
+                labels4[:yc,:xc,0] = lab[yo:yo+yc,xo:xo+xc,0]
+
+                masks.append(lab[yo:yo+yc,xo:xo+xc,0])
+
+            elif i == 1:  # top right
+                xo, yo = int(random.uniform(0, xc)), int(random.uniform(0, s-yc))
+                img4[:yc,xc:,:]    = img[yo:yo+yc,xo:xo+(s-xc),:]
+                labels4[:yc,xc:,0] = lab[yo:yo+yc,xo:xo+(s-xc),0]
+
+                masks.append(lab[yo:yo+yc,xo:xo+(s-xc),0])
+
+            elif i == 2:  # bottom left
+                xo, yo = int(random.uniform(0, s-xc)), int(random.uniform(0, yc))
+                img4[yc:,:xc,:]    = img[yo:yo+(s-yc),xo:xo+xc,:]
+                labels4[yc:,:xc,0] = lab[yo:yo+(s-yc),xo:xo+xc,0]
+
+                masks.append(lab[yo:yo+(s-yc),xo:xo+xc,0])
+
+            elif i == 3:  # bottom right
+                xo, yo = int(random.uniform(0, xc)), int(random.uniform(0, yc))
+                img4[yc:,xc:,:]    = img[yo:yo+(s-yc),xo:xo+(s-xc),:]
+                labels4[yc:,xc:,0] = lab[yo:yo+(s-yc),xo:xo+(s-xc),0]
+
+                masks.append(lab[yo:yo+(s-yc),xo:xo+(s-xc),0])
+
+        return img4, labels4
 
 
 # --- PYTESTS --- #

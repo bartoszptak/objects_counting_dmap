@@ -24,6 +24,7 @@ import torchvision.transforms.functional as TF
 import matplotlib.pyplot as plt
 from matplotlib.figure import figaspect
 from PIL import Image
+import segmentation_models_pytorch as smp
 
 from model import UNet, FCRN_A
 
@@ -34,7 +35,6 @@ from model import UNet, FCRN_A
               required=True,
               help="A path to an input image.")
 @click.option('-n', '--network_architecture',
-              type=click.Choice(['UNet', 'FCRN_A']),
               required=True,
               help='Model architecture.')
 @click.option('-c', '--checkpoint',
@@ -70,16 +70,29 @@ def infer(image_path: str,
     input_channels = 1 if one_channel else 3
 
     # initialize a model based on chosen network_architecture
-    network = {
-        'UNet': UNet,
-        'FCRN_A': FCRN_A
-    }[network_architecture](input_filters=input_channels,
-                            filters=unet_filters,
-                            N=convolutions).to(device)
+    if network_architecture in ['UNet', 'FCRN_A']:
+        network = {
+            'UNet': UNet,
+            'FCRN_A': FCRN_A
+        }[network_architecture](input_filters=input_channels,
+                                filters=unet_filters,
+                                N=convolutions)
+
+    elif network_architecture[:5] == 'UNet_':
+        network = smp.Unet(encoder_name=network_architecture.split('_')[-1], in_channels=3, classes=1) 
+    elif network_architecture[:7] == 'UNet++_':
+        network = smp.UnetPlusPlus(encoder_name=network_architecture.split('_')[-1], in_channels=3, classes=1) 
+    elif network_architecture[:4] == 'FPN_':
+        network = smp.FPN(encoder_name=network_architecture.split('_')[-1], in_channels=3, classes=1) 
+    elif network_architecture[:4] == 'PSP_':
+        network = smp.PSPNet(encoder_name=network_architecture.split('_')[-1], in_channels=3, classes=1)
+    else:
+        raise NotImplementedError
+
+    network = torch.nn.DataParallel(network.to(device))
 
     # load provided state dictionary
     # note: by default train.py saves the model in data parallel mode
-    network = torch.nn.DataParallel(network)
     network.load_state_dict(torch.load(checkpoint.name, map_location=torch.device('cpu')))
     network.eval()
 

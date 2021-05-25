@@ -26,10 +26,10 @@ from model import UNet, FCRN_A
 @click.option('-e', '--epochs', default=150, help='Number of training epochs.')
 @click.option('--batch_size', default=8,
               help='Batch size for both training and validation dataloaders.')
-@click.option('-hf', '--horizontal_flip', default=0.0,
-              help='The probability of horizontal flip for training dataset.')
-@click.option('-vf', '--vertical_flip', default=0.0,
-              help='The probability of horizontal flip for validation dataset.')
+@click.option('-a', '--aug', default=False, is_flag=True,
+              help='')
+@click.option('-m', '--mosaic', default=False, is_flag=True,
+              help='')
 @click.option('--unet_filters', default=64,
               help='Number of filters for U-Net convolutional layers.')
 @click.option('--convolutions', default=2,
@@ -45,8 +45,8 @@ def train(dataset_name: str,
           learning_rate: float,
           epochs: int,
           batch_size: int,
-          horizontal_flip: float,
-          vertical_flip: float,
+          aug: bool,
+          mosaic: bool,
           unet_filters: int,
           convolutions: int,
           checkpoint: str,
@@ -63,8 +63,8 @@ def train(dataset_name: str,
         data_path = os.path.join(dataset_name, f"{mode}.h5")
         # turn on flips only for training dataset
         dataset[mode] = H5Dataset(data_path,
-                                  horizontal_flip if mode == 'train' else 0,
-                                  vertical_flip if mode == 'train' else 0)
+                                  mosaic = mosaic if mode == 'train' else False,
+                                  aug = aug if mode == 'train' else False)
         dataloader[mode] = torch.utils.data.DataLoader(dataset[mode],
                                                        batch_size=batch_size)
 

@@ -12,7 +12,9 @@ import zipfile
 from glob import glob
 from typing import List, Tuple
 import pandas as pd
+pd.set_option('mode.chained_assignment',None)
 from glob import glob
+from tqdm import tqdm
 
 import click
 import h5py
@@ -45,7 +47,8 @@ def create_hdf5(dataset_name: str,
                 train_size: int,
                 valid_size: int,
                 img_size: Tuple[int, int],
-                in_channels: int=3):
+                in_channels: int=3,
+                whc=False):
     """
     Create empty training and validation HDF5 files with placeholders
     for images and labels (density maps).
@@ -71,10 +74,15 @@ def create_hdf5(dataset_name: str,
     train_h5 = h5py.File(os.path.join(dataset_name, 'train.h5'), 'w')
     valid_h5 = h5py.File(os.path.join(dataset_name, 'valid.h5'), 'w')
 
-    # add two HDF5 datasets (images and labels) for each HDF5 file
-    for h5, size in ((train_h5, train_size), (valid_h5, valid_size)):
-        h5.create_dataset('images', (size, in_channels, *img_size))
-        h5.create_dataset('labels', (size, 1, *img_size))
+    if not whc:
+        # add two HDF5 datasets (images and labels) for each HDF5 file
+        for h5, size in ((train_h5, train_size), (valid_h5, valid_size)):
+            h5.create_dataset('images', (size, in_channels, *img_size))
+            h5.create_dataset('labels', (size, 1, *img_size))
+    else:
+        for h5, size in ((train_h5, train_size), (valid_h5, valid_size)):
+            h5.create_dataset('images', (size, *img_size, in_channels))
+            h5.create_dataset('labels', (size, *img_size, 1))
 
     return train_h5, valid_h5
 
@@ -245,6 +253,7 @@ def generate_visdrone_data():
     # download and extract dataset
 
     bpath = '../VisDrone2020-CC/'
+    img_size = (608, 608)
 
     with open(bpath + 'trainlist.txt') as f:
         train_list = sorted(f.read().split('\n'))
@@ -259,8 +268,9 @@ def generate_visdrone_data():
     train_h5, valid_h5 = create_hdf5('visdrone',
                                      train_size=train_size,
                                      valid_size=test_size,
-                                     img_size=(608, 608),
-                                     in_channels=3)
+                                     img_size=img_size,
+                                     in_channels=3,
+                                     whc=True)
 
     def fill_h5(h5, labels, init_frame=0):
         """
@@ -272,7 +282,7 @@ def generate_visdrone_data():
             init_frame: the first frame in given list of labels
         """
         i = init_frame
-        for seq in labels:
+        for seq in tqdm(labels):
             df_lab = pd.read_csv(bpath + f'annotations/{seq}.txt', names=['img', 'x', 'y'])
 
             for path in sorted(glob(bpath + f'sequences/{seq}/*')):
@@ -280,22 +290,21 @@ def generate_visdrone_data():
                 image = Image.open(path)
                 x, y = image.size
                 
-                image = np.array(image.resize((608,608)), dtype=np.float32) / 255
-                image = np.transpose(image, (2, 0, 1))
+                image = np.array(image.resize(img_size[::-1]), dtype=np.float32) / 255
 
                 index = int(path.split('/')[-1].split('.')[0])
                 loc = df_lab[df_lab.img==index]
 
-                loc.loc[:, 'x'] *=608/x
-                loc.loc[:, 'y'] *=608/y
+                loc.loc[:, 'x'] *= img_size[1]/x
+                loc.loc[:, 'y'] *=img_size[0]/y
 
                 # generate a density map by applying a Gaussian filter
-                label = generate_label(loc[loc.img==index][['x','y']].values, image.shape[1:])
+                label = generate_label(loc[loc.img==index][['x','y']].values, image.shape[:2])
 
                 # save data to HDF5 file
                 h5['images'][i - init_frame] = image
-                h5['labels'][i - init_frame, 0] = label
-
+                h5['labels'][i - init_frame, :, :, 0] = label
+                
                 i+=1
          
     # use first 1500 frames for training and the last 500 for validation
