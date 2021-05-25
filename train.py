@@ -138,14 +138,19 @@ def train(dataset_name: str,
         # update checkpoint if new best is reached
         if result < current_best:
             current_best = result
+            path = f'{dataset_name}_{network_architecture}'
+            if aug:
+                path += '_aug'
+            if mosaic:
+                path += '_mosaic'
             torch.save(network.state_dict(),
-                       f'{dataset_name}_{network_architecture}.pth')
+                       path+'.pth')
 
             print(f"\nNew best result: {result}")
 
         print("\n", "-"*80, "\n", sep='')
 
-    print(f"[Training done] Best result: {current_best}, dataset: {dataset_name}, model: {network_architecture}")
+    print(f"[Training done] Best result: {current_best}, dataset: {dataset_name}, model: {network_architecture}, aug: {aug}, mosaic: {mosaic}")
 
 if __name__ == '__main__':
     train()
