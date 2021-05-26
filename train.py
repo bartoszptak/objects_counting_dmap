@@ -35,6 +35,7 @@ from model import UNet, FCRN_A
 @click.option('--convolutions', default=2,
               help='Number of layers in a convolutional block.')
 @click.option('--plot', is_flag=True, help="Generate a live plot.")
+@click.option('--loss', type=click.Choice(['mse', 'weight']), default='mse')
 @click.option('-c', '--checkpoint',
               type=click.File('r'),
               required=False,
@@ -46,6 +47,7 @@ def train(dataset_name: str,
           epochs: int,
           batch_size: int,
           aug: bool,
+          loss: str,
           mosaic: bool,
           unet_filters: int,
           convolutions: int,
@@ -98,7 +100,17 @@ def train(dataset_name: str,
         network.load_state_dict(torch.load(checkpoint.name))
 
     # initialize loss, optimized and learning rate scheduler
-    loss = torch.nn.MSELoss()
+
+    if loss == 'weight':
+        def count_loss(output, target):
+            mae = torch.nn.MSELoss()
+            loss = torch.mean(torch.absolute(output.sum() - target.sum()))/10e4
+            return 0.7 * mae(output, target) + 0.3 * loss
+
+        loss_fn = count_loss
+    else:
+        loss_fn = torch.nn.MSELoss()
+
     optimizer = torch.optim.SGD(network.parameters(),
                                 lr=learning_rate,
                                 momentum=0.9,
@@ -115,9 +127,9 @@ def train(dataset_name: str,
         plots = [None] * 2
 
     # create training and validation Loopers to handle a single epoch
-    train_looper = Looper(network, device, loss, optimizer,
+    train_looper = Looper(network, device, loss_fn, optimizer,
                           dataloader['train'], len(dataset['train']), plots[0])
-    valid_looper = Looper(network, device, loss, optimizer,
+    valid_looper = Looper(network, device, loss_fn, optimizer,
                           dataloader['valid'], len(dataset['valid']), plots[1],
                           validation=True)
 
