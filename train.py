@@ -105,7 +105,7 @@ def train(dataset_name: str,
         def count_loss(output, target):
             mae = torch.nn.MSELoss()
             loss = torch.mean(torch.absolute(output.sum() - target.sum()))/10e4
-            return 0.7 * mae(output, target) + 0.3 * loss
+            return 0.9 * mae(output, target) + 0.1 * loss
 
         loss_fn = count_loss
     else:
