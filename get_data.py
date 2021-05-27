@@ -15,6 +15,7 @@ import pandas as pd
 pd.set_option('mode.chained_assignment',None)
 from glob import glob
 from tqdm import tqdm
+import json
 
 import click
 import h5py
@@ -27,7 +28,7 @@ from scipy.ndimage import gaussian_filter
 
 @click.command()
 @click.option('--dataset',
-              type=click.Choice(['cell', 'mall', 'ucsd', 'visdrone']),
+              type=click.Choice(['cell', 'mall', 'ucsd', 'visdrone', 'gcc']),
               required=True)
 def get_data(dataset: str):
     """
@@ -39,7 +40,8 @@ def get_data(dataset: str):
         'cell': generate_cell_data,
         'mall': generate_mall_data,
         'ucsd': generate_ucsd_data,
-        'visdrone': generate_visdrone_data
+        'visdrone': generate_visdrone_data,
+        'gcc': generate_gcc_data
     }[dataset]()
 
 
@@ -315,6 +317,76 @@ def generate_visdrone_data():
     train_h5.close()
     valid_h5.close()
 
+def generate_gcc_data():
+    """Generate HDF5 files for mall dataset."""
+    # download and extract dataset
+
+    bpath = '../GCC/'
+    img_size = (608, 608)
+
+    all_scenees = glob(bpath+'*')
+    np.random.seed(0)
+    np.random.shuffle(all_scenees)
+
+    test_list = all_scenees[95:]
+    train_list = all_scenees[:95]
+
+    train_size = sum([len(glob(bpath + f'{l}/pngs/*')) for l in train_list])
+    test_size = sum([len(glob(bpath + f'{l}/pngs/*')) for l in test_list])
+    
+    # create training and validation HDF5 files
+    train_h5, valid_h5 = create_hdf5('gcc',
+                                     train_size=train_size,
+                                     valid_size=test_size,
+                                     img_size=img_size,
+                                     in_channels=3,
+                                     whc=True)
+
+    def fill_h5(h5, labels, init_frame=0):
+        """
+        Save images and labels in given HDF5 file.
+
+        Args:
+            h5: HDF5 file
+            labels: the list of labels
+            init_frame: the first frame in given list of labels
+        """
+        i = init_frame
+        for seq in tqdm(labels):
+            for path in sorted(glob(bpath + f'{seq}/pngs/*')):
+
+                # get an image as numpy array
+                image = Image.open(path)
+                x, y = image.size
+
+                json_path = path.replace('pngs/', 'jsons/').replace('.png', '.json')
+
+                with open(json_path, 'r') as f:
+                    ann = json.load(f)['image_info']
+
+                loc = pd.DataFrame(ann, columns=['y', 'x'])
+                
+                image = np.array(image.resize(img_size[::-1]), dtype=np.float32) / 255
+
+                loc.loc[:, 'x'] *= img_size[1]/x
+                loc.loc[:, 'y'] *=img_size[0]/y
+
+                # generate a density map by applying a Gaussian filter
+                label = generate_label(loc[['x','y']].values, image.shape[:2])
+
+                # save data to HDF5 file
+                h5['images'][i - init_frame] = image
+                h5['labels'][i - init_frame, :, :, 0] = label
+                
+                i+=1
+         
+    # use first 1500 frames for training and the last 500 for validation
+    fill_h5(train_h5, train_list)
+    fill_h5(valid_h5, test_list)
+
+    # close HDF5 file
+    train_h5.close()
+    valid_h5.close()
 
 
 def generate_cell_data():
