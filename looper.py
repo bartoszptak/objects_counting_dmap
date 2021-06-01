@@ -4,7 +4,7 @@ from typing import Optional, List
 import torch
 import numpy as np
 import matplotlib
-
+from tqdm import tqdm
 
 class Looper():
     """Looper handles epoch loops, logging, and plotting."""
@@ -17,7 +17,8 @@ class Looper():
                  data_loader: torch.utils.data.DataLoader,
                  dataset_size: int,
                  plots: Optional[matplotlib.axes.Axes]=None,
-                 validation: bool=False):
+                 validation: bool=False,
+                 sliced: bool=False):
         """
         Initialize Looper.
 
@@ -39,6 +40,7 @@ class Looper():
         self.loader = data_loader
         self.size = dataset_size
         self.validation = validation
+        self.sliced = sliced
         self.plots = plots
         self.running_loss = []
 
@@ -56,7 +58,7 @@ class Looper():
         # set a proper mode: train or eval
         self.network.train(not self.validation)
 
-        for image, label in self.loader:
+        for image, label in tqdm(self.loader):
             # move images and labels to given device
             image = image.to(self.device)
             label = label.to(self.device)
@@ -67,7 +69,7 @@ class Looper():
 
             # get model prediction (a density map)
             result = self.network(image)
-                        
+                       
             # calculate loss and update running loss
             loss = self.loss(result, label)
             self.running_loss[-1] += image.shape[0] * loss.item() / self.size
@@ -77,6 +79,41 @@ class Looper():
                 loss.backward()
                 self.optimizer.step()
 
+            if self.sliced:
+                b_label = label.squeeze()
+                b_result = result.squeeze()
+                
+                label = torch.zeros(1, 1080, 1920).to(self.device)
+                results = torch.zeros(1, 1080, 1920).to(self.device)
+
+                size = 608
+                padding = size-32
+                xs, ys = [0,576,1152,1312], [0,472]
+
+                for i, y in enumerate(ys):
+                    for k, x in enumerate(xs):
+                        part_l = b_label[i*len(xs)+k]
+                        part_b = b_result[i*len(xs)+k]
+                        
+                        if k == 0 and i == 0:
+                            label[0,:size, :+size] = part_l
+                            results[0,:size, :+size] = part_b
+                        elif k != 0 and i != 0:
+                            label[0,y:y+32, x:x+32] = (label[0,y:y+32, x:x+32] + part_l[:32, :32])/2
+                            label[0,y+32:y+size, x+32:x+size] = part_l[32:, 32:]
+                            results[0,y:y+32, x:x+32] = (results[0,y:y+32, x:x+32] + part_b[:32, :32])/2
+                            results[0,y+32:y+size, x+32:x+size] = part_b[32:, 32:]
+                        elif i == 0:
+                            label[0,y:y+size, x:x+32] = (label[0,y:y+size, x:x+32] + part_l[:, :32])/2
+                            label[0,y:y+size, x+32:x+size] = part_l[:, 32:]
+                            results[0,y:y+size, x:x+32] = (results[0,y:y+size, x:x+32] + part_b[:, :32])/2
+                            results[0,y:y+size, x+32:x+size] = part_b[:, 32:]
+                        elif k == 0:
+                            label[0,y:y+32, x:x+size] = (label[0,y:y+32, x:x+size] + part_l[:32, :])/2
+                            label[0,y+32:y+size, x:x+size] = part_l[32:, :]
+                            results[0,y:y+32, x:x+size] = (results[0,y:y+32, x:x+size] + part_b[:32, :])/2
+                            results[0,y+32:y+size, x:x+size] = part_b[32:, :]
+ 
             # loop over batch samples
             for true, predicted in zip(label, result):
                 # integrate a density map to get no. of objects
@@ -109,8 +146,13 @@ class Looper():
         self.err = [true - predicted for true, predicted in
                     zip(self.true_values, self.predicted_values)]
         self.abs_err = [abs(error) for error in self.err]
-        self.mean_err = sum(self.err) / self.size
-        self.mean_abs_err = sum(self.abs_err) / self.size
+        if self.sliced:
+            self.mean_err = sum(self.err) / (self.size/8)
+            self.mean_abs_err = sum(self.abs_err) / (self.size/8)
+        else:
+            self.mean_err = sum(self.err) / self.size
+            self.mean_abs_err = sum(self.abs_err) / self.size
+        
         self.std = np.array(self.err).std()
 
     def plot(self):

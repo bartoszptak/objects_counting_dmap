@@ -44,15 +44,18 @@ from model import UNet, FCRN_A
               required=False,
               default=None,
               help='A path to a checkpoint with weights.')
+@click.option('--sliced', default=False, is_flag=True,
+              help='')
 def eval(dataset_name: str,
           network_architecture: str,
           learning_rate: float,
           epochs: int,
-	  name: str,
+	      name: str,
           batch_size: int,
           aug: bool,
           loss: str,
           mosaic: bool,
+          sliced: bool,
           unet_filters: int,
           convolutions: int,
           checkpoint: str,
@@ -61,18 +64,10 @@ def eval(dataset_name: str,
     # use GPU if avilable
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-    dataset = {}     # training and validation HDF5-based datasets
-    dataloader = {}  # training and validation dataloaders
+    data_path = os.path.join(dataset_name, f"valid.h5")
+    dataset= H5Dataset(data_path, mosaic = False, aug = False)
 
-    for mode in ['train', 'valid']:
-        # expected HDF5 files in dataset_name/(train | valid).h5
-        data_path = os.path.join(dataset_name, f"{mode}.h5")
-        # turn on flips only for training dataset
-        dataset[mode] = H5Dataset(data_path,
-                                  mosaic = mosaic if mode == 'train' else False,
-                                  aug = aug if mode == 'train' else False)
-        dataloader[mode] = torch.utils.data.DataLoader(dataset[mode],
-                                                       batch_size=batch_size)
+    dataloader = torch.utils.data.DataLoader(dataset, batch_size=8)
 
     # only UCSD dataset provides greyscale images instead of RGB
     input_channels = 1 if dataset_name == 'ucsd' else 3
@@ -138,13 +133,13 @@ def eval(dataset_name: str,
         plots = [None] * 2
 
     valid_looper = Looper(network, device, loss_fn, optimizer,
-                          dataloader['valid'], len(dataset['valid']), plots[1],
-                          validation=True)
+                          dataloader, len(dataset), plots[1],
+                          validation=True, sliced=sliced)
 
     with torch.no_grad():
         result = valid_looper.run()
 
-    print(f"[Training done] Best result: {result}, dataset: {dataset_name}, model: {network_architecture}, aug: {aug}, mosaic: {mosaic}")
+    print(f"[Training done] Best result: {result}, dataset: {dataset_name}, model: {network_architecture}, aug: {aug}, mosaic: {mosaic}, sliced: {sliced}")
 
 if __name__ == '__main__':
     eval()
