@@ -44,7 +44,7 @@ from model import UNet, FCRN_A
               required=False,
               default=None,
               help='A path to a checkpoint with weights.')
-def train(dataset_name: str,
+def eval(dataset_name: str,
           network_architecture: str,
           learning_rate: float,
           epochs: int,
@@ -101,7 +101,14 @@ def train(dataset_name: str,
     network = torch.nn.DataParallel(network.to(device))
 
     if checkpoint:
-        network.load_state_dict(torch.load(checkpoint.name))
+        #if device == 'cpu':
+        #    print('cpu')
+        #    network.load_state_dict(torch.load(checkpoint.name, map_location=torch.device('cpu')))
+        #else:
+        #    network.load_state_dict(torch.load(checkpoint.name))
+
+        network.load_state_dict(torch.load(checkpoint.name, map_location=torch.device('cpu')))
+        network.eval()
 
     # initialize loss, optimized and learning rate scheduler
 
@@ -130,47 +137,14 @@ def train(dataset_name: str,
     else:
         plots = [None] * 2
 
-    # create training and validation Loopers to handle a single epoch
-    train_looper = Looper(network, device, loss_fn, optimizer,
-                          dataloader['train'], len(dataset['train']), plots[0])
     valid_looper = Looper(network, device, loss_fn, optimizer,
                           dataloader['valid'], len(dataset['valid']), plots[1],
                           validation=True)
 
-    # current best results (lowest mean absolute error on validation set)
-    current_best = np.infty
+    with torch.no_grad():
+        result = valid_looper.run()
 
-    for epoch in range(epochs):
-        print(f"Epoch {epoch + 1}\n")
-
-        # run training epoch and update learning rate
-        train_looper.run()
-        lr_scheduler.step()
-
-        # run validation epoch
-        with torch.no_grad():
-            result = valid_looper.run()
-
-        # update checkpoint if new best is reached
-        if result < current_best:
-            current_best = result
-            
-            if name=='':
-                path = f'{dataset_name}_{network_architecture}'
-                if aug:
-                    path += '_aug'
-                if mosaic:
-                    path += '_mosaic'
-            else:
-                path = name
-            torch.save(network.state_dict(),
-                       path+'.pth')
-
-            print(f"\nNew best result: {result}")
-
-        print("\n", "-"*80, "\n", sep='')
-
-    print(f"[Training done] Best result: {current_best}, dataset: {dataset_name}, model: {network_architecture}, aug: {aug}, mosaic: {mosaic}")
+    print(f"[Training done] Best result: {result}, dataset: {dataset_name}, model: {network_architecture}, aug: {aug}, mosaic: {mosaic}")
 
 if __name__ == '__main__':
-    train()
+    eval()
