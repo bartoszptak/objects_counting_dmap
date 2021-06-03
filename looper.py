@@ -17,7 +17,8 @@ class Looper():
                  data_loader: torch.utils.data.DataLoader,
                  dataset_size: int,
                  plots: Optional[matplotlib.axes.Axes]=None,
-                 validation: bool=False):
+                 validation: bool=False,
+                 sliced: bool=False):
         """
         Initialize Looper.
 
@@ -39,6 +40,7 @@ class Looper():
         self.loader = data_loader
         self.size = dataset_size
         self.validation = validation
+        self.sliced = sliced
         self.plots = plots
         self.running_loss = []
 
@@ -55,21 +57,22 @@ class Looper():
 
         # set a proper mode: train or eval
         self.network.train(not self.validation)
+        print(len(self.loader), self.size)
 
-        for image, label in self.loader:
+        for image, gt in self.loader:
             # move images and labels to given device
             image = image.to(self.device)
-            label = label.to(self.device)
+            gt = gt.to(self.device)
 
             # clear accumulated gradient if in train mode
             if not self.validation:
                 self.optimizer.zero_grad()
 
             # get model prediction (a density map)
-            result = self.network(image)
+            out = self.network(image)
                         
             # calculate loss and update running loss
-            loss = self.loss(result, label)
+            loss = self.loss(out, gt)
             self.running_loss[-1] += image.shape[0] * loss.item() / self.size
             #print(loss, image.shape[0] * loss.item() / self.size)
             # update weights if in train mode
@@ -77,6 +80,46 @@ class Looper():
                 loss.backward()
                 self.optimizer.step()
 
+            if self.validation and self.sliced:
+                label = torch.zeros(1, 1, 1080, 1920).to(self.device)
+                result = torch.zeros(1, 1, 1080, 1920).to(self.device)
+
+                size = 608
+                padding = size-32
+                xs, ys = [0,576,1152,1312], [0,472]
+
+
+                b_label = gt.squeeze()
+                b_result = out.squeeze()
+
+                assert b_label.size() == b_result.size()
+                assert label.size() == result.size()
+                for i, y in enumerate(ys):
+                    for k, x in enumerate(xs):
+                        part_l = b_label[i*len(xs)+k]
+                        part_b = b_result[i*len(xs)+k]
+
+                        if k == 0 and i == 0:
+                            label[0, 0, y:y+size, x:x+size] = part_l
+                            result[0, 0, y:y+size, x:x+size] = part_b
+                        elif k != 0 and i != 0:
+                            label[0, 0, y:y+32, x:x+32] = (label[0, 0, y:y+32, x:x+32] + part_l[:32, :32])/2
+                            label[0, 0, y+32:y+size, x+32:x+size] = part_l[32:, 32:]
+                            result[0, 0, y:y+32, x:x+32] = (result[0, 0, y:y+32, x:x+32] + part_b[:32, :32])/2
+                            result[0, 0, y+32:y+size, x+32:x+size] = part_b[32:, 32:]
+                        elif i == 0:
+                            label[0, 0, y:y+size, x:x+32] = (label[0, 0, y:y+size, x:x+32] + part_l[:, :32])/2
+                            label[0, 0, y:y+size, x+32:x+size] = part_l[:, 32:]
+                            result[0, 0, y:y+size, x:x+32] = (result[0, 0, y:y+size, x:x+32] + part_b[:, :32])/2
+                            result[0, 0, y:y+size, x+32:x+size] = part_b[:, 32:]
+                        elif k == 0:
+                            label[0, 0, y:y+32, x:x+size] = (label[0, 0, y:y+32, x:x+size] + part_l[:32, :])/2
+                            label[0, 0, y+32:y+size, x:x+size] = part_l[32:, :]
+                            result[0, 0, y:y+32, x:x+size] = (result[0, 0, y:y+32, x:x+size] + part_b[:32, :])/2
+                            result[0, 0, y+32:y+size, x:x+size] = part_b[32:, :]
+            else:
+                result = out
+                label = gt
             # loop over batch samples
             for true, predicted in zip(label, result):
                 # integrate a density map to get no. of objects
@@ -106,6 +149,8 @@ class Looper():
         Calculate errors and standard deviation based on current
         true and predicted values.
         """
+        #print(self.true_values, len(self.true_values))
+        #print(self.predicted_values, len(self.predicted_values))
         self.err = np.array([true - predicted for true, predicted in
                     zip(self.true_values, self.predicted_values)])
         self.abs_err = [np.abs(error) for error in self.err]

@@ -26,11 +26,13 @@ from model import UNet, FCRN_A
 @click.option('-e', '--epochs', default=150, help='Number of training epochs.')
 @click.option('--batch_size', default=8,
               help='Batch size for both training and validation dataloaders.')
-@click.option('-a', '--aug', default=False, is_flag=True,
+@click.option('--aug', default=False, is_flag=True,
               help='')
 @click.option('-e', '--eval', default=False, is_flag=True,
               help='')
-@click.option('-m', '--mosaic', default=False, is_flag=True,
+@click.option('--sliced', default=False, is_flag=True,
+              help='')
+@click.option('--mosaic', default=False, is_flag=True,
               help='')
 @click.option('--unet_filters', default=64,
               help='Number of filters for U-Net convolutional layers.')
@@ -50,6 +52,7 @@ def train(dataset_name: str,
           batch_size: int,
           aug: bool,
           eval: bool,
+          sliced: bool,
           loss: str,
           mosaic: bool,
           unet_filters: int,
@@ -134,7 +137,7 @@ def train(dataset_name: str,
                           dataloader['train'], len(dataset['train']), plots[0])
     valid_looper = Looper(network, device, loss_fn, optimizer,
                           dataloader['valid'], len(dataset['valid']), plots[1],
-                          validation=True)
+                          validation=True, sliced=sliced)
 
     # current best results (lowest mean absolute error on validation set)
     current_best = np.infty

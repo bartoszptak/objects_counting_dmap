@@ -320,9 +320,9 @@ def generate_visdrone_data(sliced=False):
                 image = Image.open(path)
                 x, y = image.size
                 
-                image = np.array(image, dtype=np.float32) / 255
                 if not sliced:
-                    image.resize((*img_size[::-1], 3))
+                    image = image.resize(img_size[::-1])
+                image = np.array(image, dtype=np.float32) / 255
 
                 index = int(path.split('/')[-1].split('.')[0])
                 loc = df_lab[df_lab.img==index]
