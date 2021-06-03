@@ -16,6 +16,7 @@ pd.set_option('mode.chained_assignment',None)
 from glob import glob
 from tqdm import tqdm
 import json
+import numpy as np
 
 import click
 import h5py
@@ -30,13 +31,20 @@ from scipy.ndimage import gaussian_filter
 @click.option('--dataset',
               type=click.Choice(['cell', 'mall', 'ucsd', 'visdrone', 'gcc']),
               required=True)
-def get_data(dataset: str):
+@click.option('--sliced', default=False, is_flag=True,
+              help='')
+def get_data(dataset: str, sliced: bool):
     """
     Get chosen dataset and generate HDF5 files with training
     and validation samples.
     """
     # dictionary-based switch statement
-    {
+    if sliced:
+        {
+        'visdrone': generate_visdrone_data,
+    }[dataset](sliced=sliced)
+    else:
+        {
         'cell': generate_cell_data,
         'mall': generate_mall_data,
         'ucsd': generate_ucsd_data,
@@ -250,8 +258,8 @@ def generate_mall_data():
     # cleanup
     shutil.rmtree('mall_dataset')
 
-def generate_visdrone_data():
-    """Generate HDF5 files for mall dataset."""
+def generate_visdrone_data(sliced=False):
+    """Generate HDF5 files for visdrone dataset."""
     # download and extract dataset
 
     bpath = '../VisDrone2020-CC/'
@@ -265,6 +273,26 @@ def generate_visdrone_data():
 
     train_size = sum([len(glob(bpath + f'sequences/{l}/*')) for l in train_list])
     test_size = sum([len(glob(bpath + f'sequences/{l}/*')) for l in test_list])
+
+    if sliced:
+        size = 608
+        padding = size-32
+        h, w = 1080, 1920
+
+        xs = sorted(set([x if (w-x)>size else (w-size) for x in range(0, w, padding)]))
+        xs = xs[:-1] if len(xs) > 1 and xs[-1]-xs[-2] > size else xs
+        xs = np.array(xs)
+        xs[xs<0] = 0
+
+        ys = sorted(set([y if (h-y)>size else (h-size) for y in range(0, h, padding)]))
+        ys = ys[:-1] if len(ys) > 1 and ys[-1]-ys[-2] > size else ys
+        ys = np.array(ys)
+        ys[ys<0] = 0
+
+        print(xs, ys)
+
+        train_size *= len(xs) * len(ys)
+        test_size *= len(xs) * len(ys)
     
     # create training and validation HDF5 files
     train_h5, valid_h5 = create_hdf5('visdrone',
@@ -274,7 +302,7 @@ def generate_visdrone_data():
                                      in_channels=3,
                                      whc=True)
 
-    def fill_h5(h5, labels, init_frame=0):
+    def fill_h5(h5, labels, init_frame=0, slide = None):
         """
         Save images and labels in given HDF5 file.
 
@@ -292,26 +320,56 @@ def generate_visdrone_data():
                 image = Image.open(path)
                 x, y = image.size
                 
-                image = np.array(image.resize(img_size[::-1]), dtype=np.float32) / 255
+                image = np.array(image, dtype=np.float32) / 255
+                if not sliced:
+                    image.resize((*img_size[::-1], 3))
 
                 index = int(path.split('/')[-1].split('.')[0])
                 loc = df_lab[df_lab.img==index]
 
-                loc.loc[:, 'x'] *= img_size[1]/x
-                loc.loc[:, 'y'] *=img_size[0]/y
+                if slide is not None:
+                    for j, yy in enumerate(slide[0]):
+                        for k, xx in enumerate(slide[1]):
 
-                # generate a density map by applying a Gaussian filter
-                label = generate_label(loc[loc.img==index][['x','y']].values, image.shape[:2])
+                            part = image[yy:yy+slide[3], xx:xx+slide[3]]
 
-                # save data to HDF5 file
-                h5['images'][i - init_frame] = image
-                h5['labels'][i - init_frame, :, :, 0] = label
-                
-                i+=1
+                            loc_loc = loc[loc.img==index].copy()
+
+                            loc_loc.loc[:, 'x'] -= xx
+                            loc_loc.loc[:, 'y'] -= yy
+
+                            loc_loc = loc_loc[(loc_loc.x < slide[3]) & (loc_loc.y < slide[3])]
+                            loc_loc = loc_loc[(loc_loc.x > 0) & (loc_loc.y > 0)]
+
+                            # generate a density map by applying a Gaussian filter
+                            label = generate_label(loc_loc[['x','y']].values, part.shape[:2])
+
+                            # save data to HDF5 file
+                            h5['images'][i - init_frame] = part
+                            h5['labels'][i - init_frame, :, :, 0] = label
+
+                            i+=1
+
+                else:
+                    loc.loc[:, 'x'] *= img_size[1]/x
+                    loc.loc[:, 'y'] *=img_size[0]/y
+
+                    # generate a density map by applying a Gaussian filter
+                    label = generate_label(loc[loc.img==index][['x','y']].values, image.shape[:2])
+
+                    # save data to HDF5 file
+                    h5['images'][i - init_frame] = image
+                    h5['labels'][i - init_frame, :, :, 0] = label
+                    
+                    i+=1
          
     # use first 1500 frames for training and the last 500 for validation
-    fill_h5(train_h5, train_list)
-    fill_h5(valid_h5, test_list)
+    if sliced:
+        fill_h5(train_h5, train_list, slide=(ys, xs, padding, size))
+        fill_h5(valid_h5, test_list, slide=(ys, xs, padding, size))
+    else:
+        fill_h5(train_h5, train_list)
+        fill_h5(valid_h5, test_list)
 
     # close HDF5 file
     train_h5.close()
