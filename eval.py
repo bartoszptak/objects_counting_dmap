@@ -24,15 +24,6 @@ from model import UNet, FCRN_A
 @click.option('--name', default='',
               required=True,
               help='')
-@click.option('-lr', '--learning_rate', default=1e-2,
-              help='Initial learning rate (lr_scheduler is applied).')
-@click.option('-e', '--epochs', default=150, help='Number of training epochs.')
-@click.option('--batch_size', default=8,
-              help='Batch size for both training and validation dataloaders.')
-@click.option('-a', '--aug', default=False, is_flag=True,
-              help='')
-@click.option('-m', '--mosaic', default=False, is_flag=True,
-              help='')
 @click.option('--unet_filters', default=64,
               help='Number of filters for U-Net convolutional layers.')
 @click.option('--convolutions', default=2,
@@ -44,17 +35,11 @@ from model import UNet, FCRN_A
               required=False,
               default=None,
               help='A path to a checkpoint with weights.')
-@click.option('--sliced', default=False, is_flag=True,
-              help='')
+@click.option('--sliced', default=False, is_flag=True, help='')
 def eval(dataset_name: str,
           network_architecture: str,
-          learning_rate: float,
-          epochs: int,
 	      name: str,
-          batch_size: int,
-          aug: bool,
           loss: str,
-          mosaic: bool,
           sliced: bool,
           unet_filters: int,
           convolutions: int,
@@ -117,14 +102,6 @@ def eval(dataset_name: str,
     else:
         loss_fn = torch.nn.MSELoss()
 
-    optimizer = torch.optim.SGD(network.parameters(),
-                                lr=learning_rate,
-                                momentum=0.9,
-                                weight_decay=1e-5)
-    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer,
-                                                   step_size=20,
-                                                   gamma=0.1)
-
     # if plot flag is on, create a live plot (to be updated by Looper)
     if plot:
         pyplot.ion()
@@ -132,7 +109,7 @@ def eval(dataset_name: str,
     else:
         plots = [None] * 2
 
-    valid_looper = Looper(network, device, loss_fn, optimizer,
+    valid_looper = Looper(network, device, loss_fn, None,
                           dataloader, len(dataset), plots[1],
                           validation=True, sliced=sliced)
 

@@ -68,10 +68,10 @@ class Looper():
                 self.optimizer.zero_grad()
 
             # get model prediction (a density map)
-            result = self.network(image)
+            out = self.network(image)
                        
             # calculate loss and update running loss
-            loss = self.loss(result, label)
+            loss = self.loss(out, label)
             self.running_loss[-1] += image.shape[0] * loss.item() / self.size
             #print(loss, image.shape[0] * loss.item() / self.size)
             # update weights if in train mode
@@ -80,11 +80,13 @@ class Looper():
                 self.optimizer.step()
 
             if self.sliced:
+                # b_image = image.squeeze()
                 b_label = label.squeeze()
-                b_result = result.squeeze()
+                b_result = out.squeeze()
                 
                 label = torch.zeros(1, 1080, 1920).to(self.device)
-                results = torch.zeros(1, 1080, 1920).to(self.device)
+                result = torch.zeros(1, 1080, 1920).to(self.device)
+                # out_image = torch.zeros(1, 3, 1080, 1920).to(self.device)
 
                 size = 608
                 padding = size-32
@@ -94,25 +96,43 @@ class Looper():
                     for k, x in enumerate(xs):
                         part_l = b_label[i*len(xs)+k]
                         part_b = b_result[i*len(xs)+k]
+                        # part_i = b_image[i*len(xs)+k]
                         
                         if k == 0 and i == 0:
-                            label[0,:size, :+size] = part_l
-                            results[0,:size, :+size] = part_b
+                            label[0,:size, :size] = part_l
+                            result[0,:size, :size] = part_b
+                            # out_image[0,:, :size, :size] = part_i
                         elif k != 0 and i != 0:
                             label[0,y:y+32, x:x+32] = (label[0,y:y+32, x:x+32] + part_l[:32, :32])/2
                             label[0,y+32:y+size, x+32:x+size] = part_l[32:, 32:]
-                            results[0,y:y+32, x:x+32] = (results[0,y:y+32, x:x+32] + part_b[:32, :32])/2
-                            results[0,y+32:y+size, x+32:x+size] = part_b[32:, 32:]
+                            result[0,y:y+32, x:x+32] = (result[0,y:y+32, x:x+32] + part_b[:32, :32])/2
+                            result[0,y+32:y+size, x+32:x+size] = part_b[32:, 32:]
+
+                            # out_image[0,:,y:y+32, x:x+32] = (out_image[0,:,y:y+32, x:x+32] + part_i[:,:32, :32])/2
+                            # out_image[0,:,y+32:y+size, x+32:x+size] = part_i[:,32:, 32:]
                         elif i == 0:
                             label[0,y:y+size, x:x+32] = (label[0,y:y+size, x:x+32] + part_l[:, :32])/2
                             label[0,y:y+size, x+32:x+size] = part_l[:, 32:]
-                            results[0,y:y+size, x:x+32] = (results[0,y:y+size, x:x+32] + part_b[:, :32])/2
-                            results[0,y:y+size, x+32:x+size] = part_b[:, 32:]
+                            result[0,y:y+size, x:x+32] = (result[0,y:y+size, x:x+32] + part_b[:, :32])/2
+                            result[0,y:y+size, x+32:x+size] = part_b[:, 32:]
+
+                            # out_image[0,:,y:y+size, x:x+32] = (out_image[0,:,y:y+size, x:x+32] + part_i[:,:, :32])/2
+                            # out_image[0,:,y:y+size, x+32:x+size] = part_i[:,:, 32:]
                         elif k == 0:
                             label[0,y:y+32, x:x+size] = (label[0,y:y+32, x:x+size] + part_l[:32, :])/2
                             label[0,y+32:y+size, x:x+size] = part_l[32:, :]
-                            results[0,y:y+32, x:x+size] = (results[0,y:y+32, x:x+size] + part_b[:32, :])/2
-                            results[0,y+32:y+size, x:x+size] = part_b[32:, :]
+                            result[0,y:y+32, x:x+size] = (result[0,y:y+32, x:x+size] + part_b[:32, :])/2
+                            result[0,y+32:y+size, x:x+size] = part_b[32:, :]
+
+                            # out_image[0,:,y:y+32, x:x+size] = (out_image[0,:,y:y+32, x:x+size] + part_i[:,:32, :])/2
+                            # out_image[0,:,y+32:y+size, x:x+size] = part_i[:,32:, :]
+
+                # print(out_image.cpu().numpy().shape)
+                # import matplotlib.pyplot as plt
+                # plt.imshow(out_image.cpu().numpy()[0].transpose((1,2,0)))
+                # plt.show()
+                # exit(1)
+                
  
             # loop over batch samples
             for true, predicted in zip(label, result):
