@@ -132,6 +132,8 @@ class Looper():
                 # plt.imshow(out_image.cpu().numpy()[0].transpose((1,2,0)))
                 # plt.show()
                 # exit(1)
+            else:
+                result = out
                 
  
             # loop over batch samples
@@ -166,12 +168,9 @@ class Looper():
         self.err = [true - predicted for true, predicted in
                     zip(self.true_values, self.predicted_values)]
         self.abs_err = [abs(error) for error in self.err]
-        if self.sliced:
-            self.mean_err = sum(self.err) / (self.size/8)
-            self.mean_abs_err = sum(self.abs_err) / (self.size/8)
-        else:
-            self.mean_err = sum(self.err) / self.size
-            self.mean_abs_err = sum(self.abs_err) / self.size
+
+        self.mean_err = np.mean(self.err)
+        self.mean_abs_err = np.mean(self.abs_err)
         
         self.std = np.array(self.err).std()
 
