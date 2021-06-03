@@ -106,11 +106,11 @@ class Looper():
         Calculate errors and standard deviation based on current
         true and predicted values.
         """
-        self.err = [true - predicted for true, predicted in
-                    zip(self.true_values, self.predicted_values)]
-        self.abs_err = [abs(error) for error in self.err]
-        self.mean_err = sum(self.err) / self.size
-        self.mean_abs_err = sum(self.abs_err) / self.size
+        self.err = np.array([true - predicted for true, predicted in
+                    zip(self.true_values, self.predicted_values)])
+        self.abs_err = [np.abs(error) for error in self.err]
+        self.mean_err = np.sum(self.err) / self.err.shape[0]
+        self.mean_abs_err = np.sum(self.abs_err) / self.err.shape[0]
         self.std = np.array(self.err).std()
 
     def plot(self):

@@ -28,6 +28,8 @@ from model import UNet, FCRN_A
               help='Batch size for both training and validation dataloaders.')
 @click.option('-a', '--aug', default=False, is_flag=True,
               help='')
+@click.option('-e', '--eval', default=False, is_flag=True,
+              help='')
 @click.option('-m', '--mosaic', default=False, is_flag=True,
               help='')
 @click.option('--unet_filters', default=64,
@@ -47,6 +49,7 @@ def train(dataset_name: str,
           epochs: int,
           batch_size: int,
           aug: bool,
+          eval: bool,
           loss: str,
           mosaic: bool,
           unet_filters: int,
@@ -136,19 +139,22 @@ def train(dataset_name: str,
     # current best results (lowest mean absolute error on validation set)
     current_best = np.infty
 
+    if eval:
+        epochs = 1
     for epoch in range(epochs):
         print(f"Epoch {epoch + 1}\n")
 
         # run training epoch and update learning rate
-        train_looper.run()
-        lr_scheduler.step()
+        if not eval:
+            train_looper.run()
+            lr_scheduler.step()
 
         # run validation epoch
         with torch.no_grad():
             result = valid_looper.run()
 
         # update checkpoint if new best is reached
-        if result < current_best:
+        if result < current_best and not eval:
             current_best = result
             path = f'{dataset_name}_{network_architecture}'
             if aug:
@@ -162,7 +168,8 @@ def train(dataset_name: str,
 
         print("\n", "-"*80, "\n", sep='')
 
-    print(f"[Training done] Best result: {current_best}, dataset: {dataset_name}, model: {network_architecture}, aug: {aug}, mosaic: {mosaic}")
+    if not eval:
+        print(f"[Training done] Best result: {current_best}, dataset: {dataset_name}, model: {network_architecture}, aug: {aug}, mosaic: {mosaic}")
 
 if __name__ == '__main__':
     train()
