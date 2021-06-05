@@ -168,6 +168,8 @@ def train(dataset_name: str,
                 path += '_aug'
             if mosaic:
                 path += '_mosaic'
+            if flow:
+                path += '_flow'
             torch.save(network.state_dict(),
                        path+'.pth')
 
@@ -176,7 +178,7 @@ def train(dataset_name: str,
         print("\n", "-"*80, "\n", sep='')
 
     if not eval:
-        print(f"[Training done] Best result: {current_best}, dataset: {dataset_name}, model: {network_architecture}, aug: {aug}, mosaic: {mosaic}")
+        print(f"[Training done] Best result: {current_best}, dataset: {dataset_name}, model: {network_architecture}, aug: {aug}, mosaic: {mosaic}, mosaic: {flow}")
 
 if __name__ == '__main__':
     train()
