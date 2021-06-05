@@ -40,6 +40,7 @@ from model import UNet, FCRN_A
               help='Number of layers in a convolutional block.')
 @click.option('--plot', is_flag=True, help="Generate a live plot.")
 @click.option('--loss', type=click.Choice(['mse', 'weight']), default='mse')
+@click.option('--flow', default=False, is_flag=True, help='')
 @click.option('-c', '--checkpoint',
               type=click.File('r'),
               required=False,
@@ -58,7 +59,8 @@ def train(dataset_name: str,
           unet_filters: int,
           convolutions: int,
           checkpoint: str,
-          plot: bool):
+          plot: bool, 
+          flow: bool):
     """Train chosen model on selected dataset."""
     # use GPU if avilable
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -78,6 +80,7 @@ def train(dataset_name: str,
 
     # only UCSD dataset provides greyscale images instead of RGB
     input_channels = 1 if dataset_name == 'ucsd' else 3
+    input_channels = input_channels+1 if flow else input_channels
 
     # initialize a model based on chosen network_architecture
 
@@ -90,13 +93,13 @@ def train(dataset_name: str,
                                 N=convolutions)
 
     elif network_architecture[:5] == 'UNet_':
-        network = smp.Unet(encoder_name=network_architecture.split('_')[-1], in_channels=3, classes=1) 
+        network = smp.Unet(encoder_name=network_architecture.split('_')[-1], in_channels=input_channels, classes=1) 
     elif network_architecture[:7] == 'UNet++_':
-        network = smp.UnetPlusPlus(encoder_name=network_architecture.split('_')[-1], in_channels=3, classes=1) 
+        network = smp.UnetPlusPlus(encoder_name=network_architecture.split('_')[-1], in_channels=input_channels, classes=1) 
     elif network_architecture[:4] == 'FPN_':
-        network = smp.FPN(encoder_name=network_architecture.split('_')[-1], in_channels=3, classes=1) 
+        network = smp.FPN(encoder_name=network_architecture.split('_')[-1], in_channels=input_channels, classes=1) 
     elif network_architecture[:4] == 'PSP_':
-        network = smp.PSPNet(encoder_name=network_architecture.split('_')[-1], in_channels=3, classes=1)
+        network = smp.PSPNet(encoder_name=network_architecture.split('_')[-1], in_channels=input_channels, classes=1)
     else:
         raise NotImplementedError
 

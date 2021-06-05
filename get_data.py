@@ -17,6 +17,7 @@ from glob import glob
 from tqdm import tqdm
 import json
 import numpy as np
+import cv2
 
 import click
 import h5py
@@ -31,18 +32,18 @@ from scipy.ndimage import gaussian_filter
 @click.option('--dataset',
               type=click.Choice(['cell', 'mall', 'ucsd', 'visdrone', 'gcc']),
               required=True)
-@click.option('--sliced', default=False, is_flag=True,
-              help='')
-def get_data(dataset: str, sliced: bool):
+@click.option('--sliced', default=False, is_flag=True, help='')
+@click.option('--flow', default=False, is_flag=True, help='')
+def get_data(dataset: str, sliced: bool, flow: bool):
     """
     Get chosen dataset and generate HDF5 files with training
     and validation samples.
     """
     # dictionary-based switch statement
-    if sliced:
+    if sliced or flow:
         {
         'visdrone': generate_visdrone_data,
-    }[dataset](sliced=sliced)
+    }[dataset](sliced=sliced, flow=flow)
     else:
         {
         'cell': generate_cell_data,
@@ -258,7 +259,7 @@ def generate_mall_data():
     # cleanup
     shutil.rmtree('mall_dataset')
 
-def generate_visdrone_data(sliced=False):
+def generate_visdrone_data(sliced=False, flow=False):
     """Generate HDF5 files for visdrone dataset."""
     # download and extract dataset
 
@@ -299,10 +300,10 @@ def generate_visdrone_data(sliced=False):
                                      train_size=train_size,
                                      valid_size=test_size,
                                      img_size=img_size,
-                                     in_channels=3,
+                                     in_channels=4 if flow else 3,
                                      whc=True)
 
-    def fill_h5(h5, labels, init_frame=0, slide = None):
+    def fill_h5(h5, labels, init_frame=0, slide = None, flow=False):
         """
         Save images and labels in given HDF5 file.
 
@@ -313,6 +314,8 @@ def generate_visdrone_data(sliced=False):
         """
         i = init_frame
         for seq in tqdm(labels):
+            if flow:
+                previous_frame = None
             df_lab = pd.read_csv(bpath + f'annotations/{seq}.txt', names=['img', 'x', 'y'])
 
             for path in sorted(glob(bpath + f'sequences/{seq}/*')):
@@ -320,9 +323,21 @@ def generate_visdrone_data(sliced=False):
                 image = Image.open(path)
                 x, y = image.size
                 
+                image = np.array(image, dtype=np.float32)
+
+                if flow:
+                    if previous_frame is None:
+                        new_layer = np.zeros((*image.shape[:2], 1))
+                    else:
+                        new_layer = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY) - cv2.cvtColor(previous_frame, cv2.COLOR_RGB2GRAY)
+                    previous_frame = image
+
+                    image = np.concatenate((image, np.reshape(new_layer, (*image.shape[:2], 1))), axis=2)
+
                 if not sliced:
-                    image = image.resize(img_size[::-1])
-                image = np.array(image, dtype=np.float32) / 255
+                    image = cv2.resize(image, img_size[::-1])
+
+                image = image * 1./255.
 
                 index = int(path.split('/')[-1].split('.')[0])
                 loc = df_lab[df_lab.img==index]
@@ -365,11 +380,11 @@ def generate_visdrone_data(sliced=False):
          
     # use first 1500 frames for training and the last 500 for validation
     if sliced:
-        fill_h5(train_h5, train_list, slide=(ys, xs, padding, size))
-        fill_h5(valid_h5, test_list, slide=(ys, xs, padding, size))
+        fill_h5(train_h5, train_list, slide=(ys, xs, padding, size, flow))
+        fill_h5(valid_h5, test_list, slide=(ys, xs, padding, size, flow))
     else:
-        fill_h5(train_h5, train_list)
-        fill_h5(valid_h5, test_list)
+        fill_h5(train_h5, train_list, flow=flow)
+        fill_h5(valid_h5, test_list, flow=flow)
 
     # close HDF5 file
     train_h5.close()

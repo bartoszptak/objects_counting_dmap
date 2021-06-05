@@ -57,7 +57,6 @@ class Looper():
 
         # set a proper mode: train or eval
         self.network.train(not self.validation)
-        print(len(self.loader), self.size)
 
         for image, gt in self.loader:
             # move images and labels to given device
