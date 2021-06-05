@@ -73,6 +73,7 @@ def train(dataset_name: str,
         data_path = os.path.join(dataset_name, f"{mode}.h5")
         # turn on flips only for training dataset
         dataset[mode] = H5Dataset(data_path,
+                                  flow = flow,
                                   mosaic = mosaic if mode == 'train' else False,
                                   aug = aug if mode == 'train' else False)
         dataloader[mode] = torch.utils.data.DataLoader(dataset[mode],
