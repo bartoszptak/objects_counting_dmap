@@ -315,7 +315,12 @@ def generate_visdrone_data(sliced=False, flow=False):
         i = init_frame
         for seq in tqdm(labels):
             if flow:
+                backSub = cv2.createBackgroundSubtractorMOG2()
+
                 previous_frame = None
+                current_frame = None
+                next_frame = None
+
             df_lab = pd.read_csv(bpath + f'annotations/{seq}.txt', names=['img', 'x', 'y'])
 
             for path in sorted(glob(bpath + f'sequences/{seq}/*')):
@@ -326,13 +331,25 @@ def generate_visdrone_data(sliced=False, flow=False):
                 image = np.array(image, dtype=np.float32)
 
                 if flow:
-                    if previous_frame is None:
-                        new_layer = np.zeros((*image.shape[:2], 1))
-                    else:
-                        new_layer = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY) - cv2.cvtColor(previous_frame, cv2.COLOR_RGB2GRAY)
-                    previous_frame = image
+                    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
 
-                    image = np.concatenate((image, np.reshape(new_layer, (*image.shape[:2], 1))), axis=2)
+                    if previous_frame is None:
+                        previous_frame = gray.copy()
+                    if current_frame is None:
+                        current_frame = gray.copy()
+
+                    next_frame = gray.copy()
+
+                    I1 = cv2.absdiff(current_frame, next_frame)
+                    I2 = cv2.absdiff(previous_frame, next_frame)
+
+                    fg = cv2.bitwise_and(I1, I2)
+                    fg[fg<10] = 0
+
+                    previous_frame = current_frame
+                    current_frame = next_frame
+
+                    image = np.concatenate((image, np.reshape(fg, (*image.shape[:2], 1))), axis=2)
 
                 if not sliced:
                     image = cv2.resize(image, img_size[::-1])
