@@ -35,23 +35,11 @@ class H5Dataset(Dataset):
 
         if self.aug:
             self.seq = A.Compose([
-                A.HorizontalFlip(p=1),
-                A.RandomBrightnessContrast(p=1),    
-                A.RandomGamma(p=1),
-                A.OneOf([
-                    A.Compose([
-                        # A.RandomScale([-0.2, -0.4], always_apply=True),
-                        A.RandomCrop(width=608, height=608, always_apply=True),
-                    ]),
-                    A.Compose([
-                        # A.RandomScale([0.0, -0.2], always_apply=True),
-                        A.Resize(608, 608, always_apply=True)
-                    ])
-                    
-                ], p=1)
+                A.HorizontalFlip(p=0.5),
+                A.RandomGamma(gamma_limit=(150, 150), p=0.5),
             ])
-        else:
-            self.resize = A.Resize(608, 608, always_apply=True)
+
+        self.resize = A.Resize(608, 608, always_apply=True)
 
     def __len__(self):
         """Return no. of samples in HDF5 file."""
@@ -61,7 +49,9 @@ class H5Dataset(Dataset):
         img, label = self.images[index], self.labels[index]
 
         if self.aug:
-            transformed = self.seq(image=img, mask=label)
+            transformed = self.seq(image=img[:,:,:3], mask=label)
+            transformed["image"] = np.concatenate((transformed["image"], img[:,:,3:]), axis=2)
+            transformed = self.resize(**transformed)
         else:
             transformed = self.resize(image=img, mask=label)
 
