@@ -33,14 +33,14 @@ from scipy.ndimage import gaussian_filter
               type=click.Choice(['cell', 'mall', 'ucsd', 'visdrone', 'gcc']),
               required=True)
 @click.option('--sliced', default=False, is_flag=True, help='')
-@click.option('--flow', default=False, is_flag=True, help='')
-def get_data(dataset: str, sliced: bool, flow: bool):
+@click.option('--flow', type=click.Choice(['', 'median', 'dis']), default='', help='')
+def get_data(dataset: str, sliced: bool, flow: str):
     """
     Get chosen dataset and generate HDF5 files with training
     and validation samples.
     """
     # dictionary-based switch statement
-    if sliced or flow:
+    if sliced or flow!='':
         {
         'visdrone': generate_visdrone_data,
     }[dataset](sliced=sliced, flow=flow)
@@ -259,7 +259,7 @@ def generate_mall_data():
     # cleanup
     shutil.rmtree('mall_dataset')
 
-def generate_visdrone_data(sliced=False, flow=False):
+def generate_visdrone_data(sliced=False, flow=''):
     """Generate HDF5 files for visdrone dataset."""
     # download and extract dataset
 
@@ -294,16 +294,31 @@ def generate_visdrone_data(sliced=False, flow=False):
 
         train_size *= len(xs) * len(ys)
         test_size *= len(xs) * len(ys)
+
+    if flow == 'median':
+        in_channels = 4
+    elif flow == 'dis':
+        in_channels = 5
+    else:
+        in_channels = 3
     
     # create training and validation HDF5 files
     train_h5, valid_h5 = create_hdf5('visdrone',
                                      train_size=train_size,
                                      valid_size=test_size,
                                      img_size=img_size,
-                                     in_channels=4 if flow else 3,
+                                     in_channels=in_channels,
                                      whc=True)
 
-    def fill_h5(h5, labels, init_frame=0, slide = None, flow=False):
+    def warp_flow(img, flow):
+        h, w = flow.shape[:2]
+        flow = -flow
+        flow[:,:,0] += np.arange(w)
+        flow[:,:,1] += np.arange(h)[:,np.newaxis]
+        res = cv2.remap(img, flow, None, cv2.INTER_LINEAR)
+        return res
+
+    def fill_h5(h5, labels, init_frame=0, slide = None, flow=''):
         """
         Save images and labels in given HDF5 file.
 
@@ -314,12 +329,18 @@ def generate_visdrone_data(sliced=False, flow=False):
         """
         i = init_frame
         for seq in tqdm(labels):
-            if flow:
+            if flow == 'median':
                 backSub = cv2.createBackgroundSubtractorMOG2()
 
                 previous_frame = None
                 current_frame = None
                 next_frame = None
+            elif flow == 'dis':
+                inst = cv2.DISOpticalFlow.create(cv2.DISOPTICAL_FLOW_PRESET_MEDIUM)
+                inst.setUseSpatialPropagation(False)
+
+                flow_img = None
+                prevgray = None
 
             df_lab = pd.read_csv(bpath + f'annotations/{seq}.txt', names=['img', 'x', 'y'])
 
@@ -330,7 +351,7 @@ def generate_visdrone_data(sliced=False, flow=False):
                 
                 image = np.array(image, dtype=np.float32)
 
-                if flow:
+                if flow == 'median':
                     gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
 
                     if previous_frame is None:
@@ -350,6 +371,21 @@ def generate_visdrone_data(sliced=False, flow=False):
                     current_frame = next_frame
 
                     image = np.concatenate((image, np.reshape(fg, (*image.shape[:2], 1))), axis=2)
+                elif flow == 'dis':
+                    gray = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_BGR2GRAY)
+
+                    if prevgray is None:
+                        prevgray = gray.copy()
+                    
+                    if flow_img is not None:
+                        flow_img = inst.calc(prevgray, gray, warp_flow(flow_img,flow_img))
+                    else:
+                        flow_img = inst.calc(prevgray, gray, None)
+
+                    prevgray = gray
+
+                    image = np.concatenate((image, np.reshape(flow_img*255., (*image.shape[:2], 2))), axis=2)
+
 
                 if not sliced:
                     image = cv2.resize(image, img_size[::-1])
