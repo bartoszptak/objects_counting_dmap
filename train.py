@@ -101,6 +101,10 @@ def train(dataset_name: str,
         network = smp.FPN(encoder_name=network_architecture.split('_')[-1], in_channels=input_channels, classes=1) 
     elif network_architecture[:4] == 'PSP_':
         network = smp.PSPNet(encoder_name=network_architecture.split('_')[-1], in_channels=input_channels, classes=1)
+    elif network_architecture[:10] == 'DeepLabV3_':
+        network = smp.PSPNet(encoder_name=network_architecture.split('_')[-1], in_channels=input_channels, classes=1)
+    elif network_architecture[:14] == 'DeepLabV3Plus_':
+        network = smp.PSPNet(encoder_name=network_architecture.split('_')[-1], in_channels=input_channels, classes=1)
     else:
         raise NotImplementedError
 
