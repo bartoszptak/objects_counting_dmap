@@ -15,7 +15,7 @@ class H5Dataset(Dataset):
 
     def __init__(self,
                  dataset_path: str,
-                 flow: bool = False,
+                 flow: str = '',
                  aug: bool = False,
                  mosaic: bool = False):
         """
@@ -95,7 +95,14 @@ class H5Dataset(Dataset):
         xc, yc = [int(random.uniform(s * 0.25, s * 0.75)) for _ in range(2)]
         indices = [index] + [random.randint(0, len(self.labels) - 1) for _ in range(3)]
 
-        img4 = np.empty((s, s, 4 if self.flow else 3), dtype=np.float32)
+        if self.flow == 'median':
+            in_channels = 4
+        elif self.flow == 'dis':
+            in_channels = 5
+        else:
+            in_channels = 3
+
+        img4 = np.empty((s, s, in_channels), dtype=np.float32)
         labels4 = np.empty((s, s, 1), dtype=np.float32)
 
         masks = []
