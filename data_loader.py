@@ -89,6 +89,8 @@ class H5Dataset(Dataset):
             in_channels = 4
         elif self.flow == 'dis':
             in_channels = 5
+        elif self.flow == 'dis2':
+            in_channels = 8
         else:
             in_channels = 3
 
