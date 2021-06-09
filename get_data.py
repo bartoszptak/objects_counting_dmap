@@ -33,7 +33,7 @@ from scipy.ndimage import gaussian_filter
               type=click.Choice(['cell', 'mall', 'ucsd', 'visdrone', 'gcc']),
               required=True)
 @click.option('--sliced', default=False, is_flag=True, help='')
-@click.option('--flow', type=click.Choice(['', 'median', 'dis']), default='', help='')
+@click.option('--flow', type=click.Choice(['', 'median', 'dis', 'dis2']), default='', help='')
 def get_data(dataset: str, sliced: bool, flow: str):
     """
     Get chosen dataset and generate HDF5 files with training
@@ -299,6 +299,8 @@ def generate_visdrone_data(sliced=False, flow=''):
         in_channels = 4
     elif flow == 'dis':
         in_channels = 5
+    elif flow == 'dis2':
+        in_channels = 8
     else:
         in_channels = 3
     
@@ -335,7 +337,7 @@ def generate_visdrone_data(sliced=False, flow=''):
                 previous_frame = None
                 current_frame = None
                 next_frame = None
-            elif flow == 'dis':
+            elif flow == 'dis' or flow == 'dis2':
                 inst = cv2.DISOpticalFlow.create(cv2.DISOPTICAL_FLOW_PRESET_MEDIUM)
                 inst.setUseSpatialPropagation(False)
 
@@ -371,7 +373,7 @@ def generate_visdrone_data(sliced=False, flow=''):
                     current_frame = next_frame
 
                     image = np.concatenate((image, np.reshape(fg, (*image.shape[:2], 1))), axis=2)
-                elif flow == 'dis':
+                elif flow == 'dis' or flow == 'dis2':
                     gray = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_BGR2GRAY)
 
                     if prevgray is None:
@@ -382,10 +384,27 @@ def generate_visdrone_data(sliced=False, flow=''):
                     else:
                         flow_img = inst.calc(prevgray, gray, None)
 
+                    if flow == 'dis2':
+                        sub = gray-prevgray
+
+                        fx, fy = flow_img[:,:,0], flow_img[:,:,1]
+                        ang = np.arctan2(fy, fx) + np.pi
+                        ang = ang*(180/np.pi/2)*255*180
+
+                        v = np.sqrt(fx*fx+fy*fy)
+                        v = np.minimum(v*4, 255)
+
+                        image = np.concatenate((
+                            image,
+                            np.reshape(sub*255., (*image.shape[:2], 1)),
+                            np.reshape(flow_img*255., (*image.shape[:2], 2)),
+                            np.reshape(ang, (*image.shape[:2], 1)),
+                            np.reshape(v, (*image.shape[:2], 1)),
+                            ), axis=2)
+                    else:
+                        image = np.concatenate((image, np.reshape(flow_img*255., (*image.shape[:2], 2))), axis=2)
+
                     prevgray = gray
-
-                    image = np.concatenate((image, np.reshape(flow_img*255., (*image.shape[:2], 2))), axis=2)
-
 
                 if not sliced:
                     image = cv2.resize(image, img_size[::-1])

@@ -40,7 +40,7 @@ from model import UNet, FCRN_A
               help='Number of layers in a convolutional block.')
 @click.option('--plot', is_flag=True, help="Generate a live plot.")
 @click.option('--loss', type=click.Choice(['mse', 'weight']), default='mse')
-@click.option('--flow', type=click.Choice(['', 'median', 'dis']), default='', help='')
+@click.option('--flow', type=click.Choice(['', 'median', 'dis', 'dis2']), default='', help='')
 @click.option('-c', '--checkpoint',
               type=click.File('r'),
               required=False,
@@ -85,6 +85,8 @@ def train(dataset_name: str,
         in_channels += 1
     elif flow == 'dis':
         in_channels += 2
+    elif flow == 'dis2':
+        in_channels += 5
 
     # initialize a model based on chosen network_architecture
 
