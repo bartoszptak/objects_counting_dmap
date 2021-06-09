@@ -1,0 +1,2263 @@
+Epoch 1
+
+Train:
+	Average loss: 0.3252
+	Mean error: 1.780
+	Mean absolute error: 82.111
+	Error deviation: 114.565
+Valid:
+	Average loss: 0.4153
+	Mean error: 120.392
+	Mean absolute error: 126.186
+	Error deviation: 105.711
+
+New best result: 126.18631569417316
+
+--------------------------------------------------------------------------------
+
+Epoch 2
+
+Train:
+	Average loss: 0.3144
+	Mean error: -1.105
+	Mean absolute error: 70.991
+	Error deviation: 99.237
+Valid:
+	Average loss: 0.4143
+	Mean error: 134.931
+	Mean absolute error: 137.217
+	Error deviation: 100.478
+
+--------------------------------------------------------------------------------
+
+Epoch 3
+
+Train:
+	Average loss: 0.3132
+	Mean error: -1.065
+	Mean absolute error: 69.529
+	Error deviation: 94.155
+Valid:
+	Average loss: 0.4137
+	Mean error: 148.940
+	Mean absolute error: 151.279
+	Error deviation: 102.185
+
+--------------------------------------------------------------------------------
+
+Epoch 4
+
+Train:
+	Average loss: 0.3117
+	Mean error: -0.555
+	Mean absolute error: 70.627
+	Error deviation: 93.527
+Valid:
+	Average loss: 0.4126
+	Mean error: 168.925
+	Mean absolute error: 169.281
+	Error deviation: 101.529
+
+--------------------------------------------------------------------------------
+
+Epoch 5
+
+Train:
+	Average loss: 0.3100
+	Mean error: -0.060
+	Mean absolute error: 71.578
+	Error deviation: 93.253
+Valid:
+	Average loss: 0.4114
+	Mean error: 154.571
+	Mean absolute error: 155.135
+	Error deviation: 97.808
+
+--------------------------------------------------------------------------------
+
+Epoch 6
+
+Train:
+	Average loss: 0.3081
+	Mean error: -0.195
+	Mean absolute error: 79.877
+	Error deviation: 100.348
+Valid:
+	Average loss: 0.4104
+	Mean error: 127.101
+	Mean absolute error: 132.353
+	Error deviation: 99.251
+
+--------------------------------------------------------------------------------
+
+Epoch 7
+
+Train:
+	Average loss: 0.3066
+	Mean error: -0.301
+	Mean absolute error: 90.922
+	Error deviation: 116.372
+Valid:
+	Average loss: 0.4103
+	Mean error: 67.725
+	Mean absolute error: 101.459
+	Error deviation: 103.217
+
+New best result: 101.45903154500323
+
+--------------------------------------------------------------------------------
+
+Epoch 8
+
+Train:
+	Average loss: 0.3088
+	Mean error: -0.514
+	Mean absolute error: 111.714
+	Error deviation: 141.496
+Valid:
+	Average loss: 0.4105
+	Mean error: 7.346
+	Mean absolute error: 80.672
+	Error deviation: 95.966
+
+New best result: 80.67154526774081
+
+--------------------------------------------------------------------------------
+
+Epoch 9
+
+Train:
+	Average loss: 0.3059
+	Mean error: 0.118
+	Mean absolute error: 111.456
+	Error deviation: 140.787
+Valid:
+	Average loss: 0.4054
+	Mean error: 42.140
+	Mean absolute error: 83.577
+	Error deviation: 95.947
+
+--------------------------------------------------------------------------------
+
+Epoch 10
+
+Train:
+	Average loss: 0.3008
+	Mean error: -0.077
+	Mean absolute error: 104.549
+	Error deviation: 131.794
+Valid:
+	Average loss: 0.4031
+	Mean error: 42.156
+	Mean absolute error: 78.781
+	Error deviation: 94.548
+
+New best result: 78.78072251383463
+
+--------------------------------------------------------------------------------
+
+Epoch 11
+
+Train:
+	Average loss: 0.2951
+	Mean error: 0.907
+	Mean absolute error: 99.507
+	Error deviation: 130.080
+Valid:
+	Average loss: 0.3938
+	Mean error: 86.875
+	Mean absolute error: 103.269
+	Error deviation: 88.008
+
+--------------------------------------------------------------------------------
+
+Epoch 12
+
+Train:
+	Average loss: 0.2990
+	Mean error: -0.375
+	Mean absolute error: 82.495
+	Error deviation: 111.122
+Valid:
+	Average loss: 0.4005
+	Mean error: 104.439
+	Mean absolute error: 116.145
+	Error deviation: 100.719
+
+--------------------------------------------------------------------------------
+
+Epoch 13
+
+Train:
+	Average loss: 0.2955
+	Mean error: 0.435
+	Mean absolute error: 63.570
+	Error deviation: 92.481
+Valid:
+	Average loss: 0.3891
+	Mean error: 1.260
+	Mean absolute error: 66.540
+	Error deviation: 95.220
+
+New best result: 66.54011446126302
+
+--------------------------------------------------------------------------------
+
+Epoch 14
+
+Train:
+	Average loss: 0.2963
+	Mean error: -0.036
+	Mean absolute error: 75.816
+	Error deviation: 95.775
+Valid:
+	Average loss: 0.3874
+	Mean error: 35.081
+	Mean absolute error: 72.886
+	Error deviation: 89.505
+
+--------------------------------------------------------------------------------
+
+Epoch 15
+
+Train:
+	Average loss: 0.2853
+	Mean error: -0.674
+	Mean absolute error: 60.637
+	Error deviation: 83.585
+Valid:
+	Average loss: 0.3845
+	Mean error: 9.296
+	Mean absolute error: 59.553
+	Error deviation: 83.333
+
+New best result: 59.55326121012365
+
+--------------------------------------------------------------------------------
+
+Epoch 16
+
+Train:
+	Average loss: 0.2805
+	Mean error: 0.326
+	Mean absolute error: 61.901
+	Error deviation: 81.772
+Valid:
+	Average loss: 0.3897
+	Mean error: 98.376
+	Mean absolute error: 108.791
+	Error deviation: 90.892
+
+--------------------------------------------------------------------------------
+
+Epoch 17
+
+Train:
+	Average loss: 0.2755
+	Mean error: -0.031
+	Mean absolute error: 65.362
+	Error deviation: 83.940
+Valid:
+	Average loss: 0.3991
+	Mean error: 104.802
+	Mean absolute error: 114.161
+	Error deviation: 95.149
+
+--------------------------------------------------------------------------------
+
+Epoch 18
+
+Train:
+	Average loss: 0.2695
+	Mean error: -0.275
+	Mean absolute error: 62.495
+	Error deviation: 80.883
+Valid:
+	Average loss: 0.3849
+	Mean error: 63.000
+	Mean absolute error: 82.610
+	Error deviation: 79.798
+
+--------------------------------------------------------------------------------
+
+Epoch 19
+
+Train:
+	Average loss: 0.2656
+	Mean error: -0.588
+	Mean absolute error: 58.773
+	Error deviation: 76.280
+Valid:
+	Average loss: 0.3791
+	Mean error: 69.043
+	Mean absolute error: 86.501
+	Error deviation: 78.876
+
+--------------------------------------------------------------------------------
+
+Epoch 20
+
+Train:
+	Average loss: 0.2613
+	Mean error: -0.531
+	Mean absolute error: 60.232
+	Error deviation: 76.050
+Valid:
+	Average loss: 0.3828
+	Mean error: 101.903
+	Mean absolute error: 107.435
+	Error deviation: 83.680
+
+--------------------------------------------------------------------------------
+
+Epoch 21
+
+Train:
+	Average loss: 0.2640
+	Mean error: 1.259
+	Mean absolute error: 60.732
+	Error deviation: 82.857
+Valid:
+	Average loss: 0.3812
+	Mean error: 70.417
+	Mean absolute error: 82.039
+	Error deviation: 76.477
+
+--------------------------------------------------------------------------------
+
+Epoch 22
+
+Train:
+	Average loss: 0.2552
+	Mean error: -0.613
+	Mean absolute error: 52.003
+	Error deviation: 69.754
+Valid:
+	Average loss: 0.3818
+	Mean error: 71.221
+	Mean absolute error: 81.336
+	Error deviation: 76.421
+
+--------------------------------------------------------------------------------
+
+Epoch 23
+
+Train:
+	Average loss: 0.2517
+	Mean error: -0.329
+	Mean absolute error: 48.720
+	Error deviation: 65.574
+Valid:
+	Average loss: 0.3818
+	Mean error: 71.840
+	Mean absolute error: 80.724
+	Error deviation: 75.962
+
+--------------------------------------------------------------------------------
+
+Epoch 24
+
+Train:
+	Average loss: 0.2491
+	Mean error: -0.188
+	Mean absolute error: 45.975
+	Error deviation: 61.863
+Valid:
+	Average loss: 0.3813
+	Mean error: 71.010
+	Mean absolute error: 79.588
+	Error deviation: 75.296
+
+--------------------------------------------------------------------------------
+
+Epoch 25
+
+Train:
+	Average loss: 0.2469
+	Mean error: 0.157
+	Mean absolute error: 43.420
+	Error deviation: 58.229
+Valid:
+	Average loss: 0.3813
+	Mean error: 69.033
+	Mean absolute error: 77.724
+	Error deviation: 74.798
+
+--------------------------------------------------------------------------------
+
+Epoch 26
+
+Train:
+	Average loss: 0.2450
+	Mean error: 0.049
+	Mean absolute error: 41.108
+	Error deviation: 54.856
+Valid:
+	Average loss: 0.3812
+	Mean error: 66.862
+	Mean absolute error: 75.589
+	Error deviation: 73.982
+
+--------------------------------------------------------------------------------
+
+Epoch 27
+
+Train:
+	Average loss: 0.2434
+	Mean error: 0.122
+	Mean absolute error: 39.321
+	Error deviation: 52.188
+Valid:
+	Average loss: 0.3818
+	Mean error: 65.607
+	Mean absolute error: 74.236
+	Error deviation: 73.972
+
+--------------------------------------------------------------------------------
+
+Epoch 28
+
+Train:
+	Average loss: 0.2418
+	Mean error: 0.125
+	Mean absolute error: 37.558
+	Error deviation: 49.600
+Valid:
+	Average loss: 0.3829
+	Mean error: 64.547
+	Mean absolute error: 73.173
+	Error deviation: 74.546
+
+--------------------------------------------------------------------------------
+
+Epoch 29
+
+Train:
+	Average loss: 0.2404
+	Mean error: 0.109
+	Mean absolute error: 36.243
+	Error deviation: 47.524
+Valid:
+	Average loss: 0.3855
+	Mean error: 62.821
+	Mean absolute error: 73.064
+	Error deviation: 75.677
+
+--------------------------------------------------------------------------------
+
+Epoch 30
+
+Train:
+	Average loss: 0.2391
+	Mean error: 0.153
+	Mean absolute error: 35.139
+	Error deviation: 45.774
+Valid:
+	Average loss: 0.3867
+	Mean error: 60.283
+	Mean absolute error: 72.149
+	Error deviation: 75.061
+
+--------------------------------------------------------------------------------
+
+Epoch 31
+
+Train:
+	Average loss: 0.2379
+	Mean error: 0.121
+	Mean absolute error: 34.188
+	Error deviation: 44.233
+Valid:
+	Average loss: 0.3886
+	Mean error: 58.693
+	Mean absolute error: 72.297
+	Error deviation: 75.978
+
+--------------------------------------------------------------------------------
+
+Epoch 32
+
+Train:
+	Average loss: 0.2367
+	Mean error: 0.114
+	Mean absolute error: 33.252
+	Error deviation: 42.765
+Valid:
+	Average loss: 0.3907
+	Mean error: 56.390
+	Mean absolute error: 71.993
+	Error deviation: 76.696
+
+--------------------------------------------------------------------------------
+
+Epoch 33
+
+Train:
+	Average loss: 0.2354
+	Mean error: 0.119
+	Mean absolute error: 32.315
+	Error deviation: 41.363
+Valid:
+	Average loss: 0.3911
+	Mean error: 57.595
+	Mean absolute error: 72.692
+	Error deviation: 77.158
+
+--------------------------------------------------------------------------------
+
+Epoch 34
+
+Train:
+	Average loss: 0.2342
+	Mean error: 0.122
+	Mean absolute error: 31.410
+	Error deviation: 40.107
+Valid:
+	Average loss: 0.3923
+	Mean error: 55.201
+	Mean absolute error: 71.470
+	Error deviation: 77.389
+
+--------------------------------------------------------------------------------
+
+Epoch 35
+
+Train:
+	Average loss: 0.2331
+	Mean error: 0.091
+	Mean absolute error: 30.665
+	Error deviation: 39.149
+Valid:
+	Average loss: 0.3931
+	Mean error: 51.128
+	Mean absolute error: 68.640
+	Error deviation: 76.208
+
+--------------------------------------------------------------------------------
+
+Epoch 36
+
+Train:
+	Average loss: 0.2322
+	Mean error: 0.152
+	Mean absolute error: 29.761
+	Error deviation: 37.926
+Valid:
+	Average loss: 0.3930
+	Mean error: 50.183
+	Mean absolute error: 67.605
+	Error deviation: 75.395
+
+--------------------------------------------------------------------------------
+
+Epoch 37
+
+Train:
+	Average loss: 0.2310
+	Mean error: 0.114
+	Mean absolute error: 29.060
+	Error deviation: 37.036
+Valid:
+	Average loss: 0.3908
+	Mean error: 51.731
+	Mean absolute error: 67.157
+	Error deviation: 74.466
+
+--------------------------------------------------------------------------------
+
+Epoch 38
+
+Train:
+	Average loss: 0.2299
+	Mean error: 0.094
+	Mean absolute error: 28.371
+	Error deviation: 36.021
+Valid:
+	Average loss: 0.3899
+	Mean error: 52.291
+	Mean absolute error: 66.924
+	Error deviation: 74.064
+
+--------------------------------------------------------------------------------
+
+Epoch 39
+
+Train:
+	Average loss: 0.2289
+	Mean error: 0.255
+	Mean absolute error: 27.686
+	Error deviation: 35.152
+Valid:
+	Average loss: 0.3837
+	Mean error: 52.642
+	Mean absolute error: 63.543
+	Error deviation: 71.014
+
+--------------------------------------------------------------------------------
+
+Epoch 40
+
+Train:
+	Average loss: 0.2279
+	Mean error: 0.114
+	Mean absolute error: 27.029
+	Error deviation: 34.396
+Valid:
+	Average loss: 0.3836
+	Mean error: 52.756
+	Mean absolute error: 63.786
+	Error deviation: 71.157
+
+--------------------------------------------------------------------------------
+
+Epoch 41
+
+Train:
+	Average loss: 0.2300
+	Mean error: 1.897
+	Mean absolute error: 29.127
+	Error deviation: 36.804
+Valid:
+	Average loss: 0.3825
+	Mean error: 54.816
+	Mean absolute error: 65.331
+	Error deviation: 71.845
+
+--------------------------------------------------------------------------------
+
+Epoch 42
+
+Train:
+	Average loss: 0.2294
+	Mean error: 0.121
+	Mean absolute error: 28.173
+	Error deviation: 35.342
+Valid:
+	Average loss: 0.3820
+	Mean error: 55.098
+	Mean absolute error: 65.804
+	Error deviation: 71.785
+
+--------------------------------------------------------------------------------
+
+Epoch 43
+
+Train:
+	Average loss: 0.2290
+	Mean error: 0.117
+	Mean absolute error: 27.591
+	Error deviation: 34.590
+Valid:
+	Average loss: 0.3817
+	Mean error: 55.843
+	Mean absolute error: 66.402
+	Error deviation: 71.759
+
+--------------------------------------------------------------------------------
+
+Epoch 44
+
+Train:
+	Average loss: 0.2286
+	Mean error: 0.124
+	Mean absolute error: 27.229
+	Error deviation: 34.158
+Valid:
+	Average loss: 0.3815
+	Mean error: 56.075
+	Mean absolute error: 66.645
+	Error deviation: 71.667
+
+--------------------------------------------------------------------------------
+
+Epoch 45
+
+Train:
+	Average loss: 0.2282
+	Mean error: 0.090
+	Mean absolute error: 26.973
+	Error deviation: 33.841
+Valid:
+	Average loss: 0.3814
+	Mean error: 55.953
+	Mean absolute error: 66.620
+	Error deviation: 71.585
+
+--------------------------------------------------------------------------------
+
+Epoch 46
+
+Train:
+	Average loss: 0.2279
+	Mean error: 0.075
+	Mean absolute error: 26.759
+	Error deviation: 33.577
+Valid:
+	Average loss: 0.3814
+	Mean error: 55.961
+	Mean absolute error: 66.671
+	Error deviation: 71.559
+
+--------------------------------------------------------------------------------
+
+Epoch 47
+
+Train:
+	Average loss: 0.2277
+	Mean error: 0.045
+	Mean absolute error: 26.584
+	Error deviation: 33.358
+Valid:
+	Average loss: 0.3814
+	Mean error: 55.904
+	Mean absolute error: 66.678
+	Error deviation: 71.550
+
+--------------------------------------------------------------------------------
+
+Epoch 48
+
+Train:
+	Average loss: 0.2274
+	Mean error: 0.020
+	Mean absolute error: 26.425
+	Error deviation: 33.161
+Valid:
+	Average loss: 0.3814
+	Mean error: 55.911
+	Mean absolute error: 66.709
+	Error deviation: 71.575
+
+--------------------------------------------------------------------------------
+
+Epoch 49
+
+Train:
+	Average loss: 0.2272
+	Mean error: 0.005
+	Mean absolute error: 26.266
+	Error deviation: 32.969
+Valid:
+	Average loss: 0.3814
+	Mean error: 56.038
+	Mean absolute error: 66.786
+	Error deviation: 71.622
+
+--------------------------------------------------------------------------------
+
+Epoch 50
+
+Train:
+	Average loss: 0.2269
+	Mean error: -0.014
+	Mean absolute error: 26.123
+	Error deviation: 32.790
+Valid:
+	Average loss: 0.3814
+	Mean error: 56.101
+	Mean absolute error: 66.825
+	Error deviation: 71.666
+
+--------------------------------------------------------------------------------
+
+Epoch 51
+
+Train:
+	Average loss: 0.2267
+	Mean error: -0.027
+	Mean absolute error: 25.995
+	Error deviation: 32.628
+Valid:
+	Average loss: 0.3815
+	Mean error: 56.041
+	Mean absolute error: 66.783
+	Error deviation: 71.690
+
+--------------------------------------------------------------------------------
+
+Epoch 52
+
+Train:
+	Average loss: 0.2265
+	Mean error: -0.043
+	Mean absolute error: 25.873
+	Error deviation: 32.471
+Valid:
+	Average loss: 0.3815
+	Mean error: 55.991
+	Mean absolute error: 66.758
+	Error deviation: 71.707
+
+--------------------------------------------------------------------------------
+
+Epoch 53
+
+Train:
+	Average loss: 0.2263
+	Mean error: -0.048
+	Mean absolute error: 25.758
+	Error deviation: 32.323
+Valid:
+	Average loss: 0.3815
+	Mean error: 55.956
+	Mean absolute error: 66.748
+	Error deviation: 71.741
+
+--------------------------------------------------------------------------------
+
+Epoch 54
+
+Train:
+	Average loss: 0.2261
+	Mean error: -0.058
+	Mean absolute error: 25.649
+	Error deviation: 32.181
+Valid:
+	Average loss: 0.3815
+	Mean error: 55.992
+	Mean absolute error: 66.771
+	Error deviation: 71.783
+
+--------------------------------------------------------------------------------
+
+Epoch 55
+
+Train:
+	Average loss: 0.2259
+	Mean error: -0.069
+	Mean absolute error: 25.546
+	Error deviation: 32.047
+Valid:
+	Average loss: 0.3816
+	Mean error: 55.970
+	Mean absolute error: 66.768
+	Error deviation: 71.810
+
+--------------------------------------------------------------------------------
+
+Epoch 56
+
+Train:
+	Average loss: 0.2257
+	Mean error: -0.075
+	Mean absolute error: 25.440
+	Error deviation: 31.914
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.000
+	Mean absolute error: 66.800
+	Error deviation: 71.850
+
+--------------------------------------------------------------------------------
+
+Epoch 57
+
+Train:
+	Average loss: 0.2255
+	Mean error: -0.078
+	Mean absolute error: 25.337
+	Error deviation: 31.783
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.092
+	Mean absolute error: 66.864
+	Error deviation: 71.918
+
+--------------------------------------------------------------------------------
+
+Epoch 58
+
+Train:
+	Average loss: 0.2253
+	Mean error: -0.086
+	Mean absolute error: 25.237
+	Error deviation: 31.655
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.200
+	Mean absolute error: 66.934
+	Error deviation: 71.987
+
+--------------------------------------------------------------------------------
+
+Epoch 59
+
+Train:
+	Average loss: 0.2251
+	Mean error: -0.093
+	Mean absolute error: 25.141
+	Error deviation: 31.532
+Valid:
+	Average loss: 0.3817
+	Mean error: 56.304
+	Mean absolute error: 66.998
+	Error deviation: 72.044
+
+--------------------------------------------------------------------------------
+
+Epoch 60
+
+Train:
+	Average loss: 0.2249
+	Mean error: -0.093
+	Mean absolute error: 25.045
+	Error deviation: 31.412
+Valid:
+	Average loss: 0.3817
+	Mean error: 56.353
+	Mean absolute error: 67.030
+	Error deviation: 72.077
+
+--------------------------------------------------------------------------------
+
+Epoch 61
+
+Train:
+	Average loss: 0.2257
+	Mean error: -1.355
+	Mean absolute error: 24.893
+	Error deviation: 30.997
+Valid:
+	Average loss: 0.3817
+	Mean error: 56.609
+	Mean absolute error: 67.553
+	Error deviation: 72.003
+
+--------------------------------------------------------------------------------
+
+Epoch 62
+
+Train:
+	Average loss: 0.2256
+	Mean error: -0.647
+	Mean absolute error: 24.706
+	Error deviation: 31.000
+Valid:
+	Average loss: 0.3817
+	Mean error: 57.160
+	Mean absolute error: 67.868
+	Error deviation: 72.104
+
+--------------------------------------------------------------------------------
+
+Epoch 63
+
+Train:
+	Average loss: 0.2256
+	Mean error: -0.224
+	Mean absolute error: 24.592
+	Error deviation: 30.994
+Valid:
+	Average loss: 0.3817
+	Mean error: 57.447
+	Mean absolute error: 68.038
+	Error deviation: 72.168
+
+--------------------------------------------------------------------------------
+
+Epoch 64
+
+Train:
+	Average loss: 0.2255
+	Mean error: 0.035
+	Mean absolute error: 24.519
+	Error deviation: 30.984
+Valid:
+	Average loss: 0.3817
+	Mean error: 57.575
+	Mean absolute error: 68.114
+	Error deviation: 72.194
+
+--------------------------------------------------------------------------------
+
+Epoch 65
+
+Train:
+	Average loss: 0.2255
+	Mean error: 0.190
+	Mean absolute error: 24.471
+	Error deviation: 30.974
+Valid:
+	Average loss: 0.3817
+	Mean error: 57.606
+	Mean absolute error: 68.131
+	Error deviation: 72.200
+
+--------------------------------------------------------------------------------
+
+Epoch 66
+
+Train:
+	Average loss: 0.2254
+	Mean error: 0.284
+	Mean absolute error: 24.437
+	Error deviation: 30.963
+Valid:
+	Average loss: 0.3817
+	Mean error: 57.570
+	Mean absolute error: 68.108
+	Error deviation: 72.188
+
+--------------------------------------------------------------------------------
+
+Epoch 67
+
+Train:
+	Average loss: 0.2254
+	Mean error: 0.333
+	Mean absolute error: 24.414
+	Error deviation: 30.950
+Valid:
+	Average loss: 0.3817
+	Mean error: 57.490
+	Mean absolute error: 68.059
+	Error deviation: 72.169
+
+--------------------------------------------------------------------------------
+
+Epoch 68
+
+Train:
+	Average loss: 0.2254
+	Mean error: 0.357
+	Mean absolute error: 24.395
+	Error deviation: 30.937
+Valid:
+	Average loss: 0.3817
+	Mean error: 57.397
+	Mean absolute error: 68.003
+	Error deviation: 72.146
+
+--------------------------------------------------------------------------------
+
+Epoch 69
+
+Train:
+	Average loss: 0.2253
+	Mean error: 0.364
+	Mean absolute error: 24.381
+	Error deviation: 30.924
+Valid:
+	Average loss: 0.3817
+	Mean error: 57.285
+	Mean absolute error: 67.938
+	Error deviation: 72.118
+
+--------------------------------------------------------------------------------
+
+Epoch 70
+
+Train:
+	Average loss: 0.2253
+	Mean error: 0.362
+	Mean absolute error: 24.371
+	Error deviation: 30.912
+Valid:
+	Average loss: 0.3817
+	Mean error: 57.175
+	Mean absolute error: 67.874
+	Error deviation: 72.093
+
+--------------------------------------------------------------------------------
+
+Epoch 71
+
+Train:
+	Average loss: 0.2253
+	Mean error: 0.353
+	Mean absolute error: 24.363
+	Error deviation: 30.900
+Valid:
+	Average loss: 0.3817
+	Mean error: 57.057
+	Mean absolute error: 67.806
+	Error deviation: 72.065
+
+--------------------------------------------------------------------------------
+
+Epoch 72
+
+Train:
+	Average loss: 0.2253
+	Mean error: 0.339
+	Mean absolute error: 24.356
+	Error deviation: 30.889
+Valid:
+	Average loss: 0.3817
+	Mean error: 56.944
+	Mean absolute error: 67.741
+	Error deviation: 72.040
+
+--------------------------------------------------------------------------------
+
+Epoch 73
+
+Train:
+	Average loss: 0.2252
+	Mean error: 0.324
+	Mean absolute error: 24.350
+	Error deviation: 30.877
+Valid:
+	Average loss: 0.3817
+	Mean error: 56.839
+	Mean absolute error: 67.683
+	Error deviation: 72.018
+
+--------------------------------------------------------------------------------
+
+Epoch 74
+
+Train:
+	Average loss: 0.2252
+	Mean error: 0.308
+	Mean absolute error: 24.344
+	Error deviation: 30.865
+Valid:
+	Average loss: 0.3817
+	Mean error: 56.735
+	Mean absolute error: 67.626
+	Error deviation: 71.996
+
+--------------------------------------------------------------------------------
+
+Epoch 75
+
+Train:
+	Average loss: 0.2252
+	Mean error: 0.292
+	Mean absolute error: 24.338
+	Error deviation: 30.853
+Valid:
+	Average loss: 0.3817
+	Mean error: 56.636
+	Mean absolute error: 67.573
+	Error deviation: 71.975
+
+--------------------------------------------------------------------------------
+
+Epoch 76
+
+Train:
+	Average loss: 0.2251
+	Mean error: 0.276
+	Mean absolute error: 24.332
+	Error deviation: 30.841
+Valid:
+	Average loss: 0.3817
+	Mean error: 56.546
+	Mean absolute error: 67.525
+	Error deviation: 71.957
+
+--------------------------------------------------------------------------------
+
+Epoch 77
+
+Train:
+	Average loss: 0.2251
+	Mean error: 0.260
+	Mean absolute error: 24.326
+	Error deviation: 30.829
+Valid:
+	Average loss: 0.3817
+	Mean error: 56.449
+	Mean absolute error: 67.473
+	Error deviation: 71.935
+
+--------------------------------------------------------------------------------
+
+Epoch 78
+
+Train:
+	Average loss: 0.2251
+	Mean error: 0.244
+	Mean absolute error: 24.321
+	Error deviation: 30.818
+Valid:
+	Average loss: 0.3817
+	Mean error: 56.354
+	Mean absolute error: 67.421
+	Error deviation: 71.915
+
+--------------------------------------------------------------------------------
+
+Epoch 79
+
+Train:
+	Average loss: 0.2251
+	Mean error: 0.228
+	Mean absolute error: 24.315
+	Error deviation: 30.806
+Valid:
+	Average loss: 0.3817
+	Mean error: 56.261
+	Mean absolute error: 67.371
+	Error deviation: 71.896
+
+--------------------------------------------------------------------------------
+
+Epoch 80
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.211
+	Mean absolute error: 24.310
+	Error deviation: 30.794
+Valid:
+	Average loss: 0.3817
+	Mean error: 56.181
+	Mean absolute error: 67.328
+	Error deviation: 71.880
+
+--------------------------------------------------------------------------------
+
+Epoch 81
+
+Train:
+	Average loss: 0.2250
+	Mean error: -0.150
+	Mean absolute error: 24.348
+	Error deviation: 30.758
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.343
+	Mean absolute error: 67.426
+	Error deviation: 71.932
+
+--------------------------------------------------------------------------------
+
+Epoch 82
+
+Train:
+	Average loss: 0.2250
+	Mean error: -0.121
+	Mean absolute error: 24.339
+	Error deviation: 30.757
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.386
+	Mean absolute error: 67.454
+	Error deviation: 71.939
+
+--------------------------------------------------------------------------------
+
+Epoch 83
+
+Train:
+	Average loss: 0.2250
+	Mean error: -0.096
+	Mean absolute error: 24.332
+	Error deviation: 30.755
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.419
+	Mean absolute error: 67.475
+	Error deviation: 71.946
+
+--------------------------------------------------------------------------------
+
+Epoch 84
+
+Train:
+	Average loss: 0.2250
+	Mean error: -0.077
+	Mean absolute error: 24.325
+	Error deviation: 30.753
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.446
+	Mean absolute error: 67.492
+	Error deviation: 71.950
+
+--------------------------------------------------------------------------------
+
+Epoch 85
+
+Train:
+	Average loss: 0.2250
+	Mean error: -0.061
+	Mean absolute error: 24.320
+	Error deviation: 30.752
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.469
+	Mean absolute error: 67.507
+	Error deviation: 71.955
+
+--------------------------------------------------------------------------------
+
+Epoch 86
+
+Train:
+	Average loss: 0.2250
+	Mean error: -0.048
+	Mean absolute error: 24.315
+	Error deviation: 30.750
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.486
+	Mean absolute error: 67.518
+	Error deviation: 71.958
+
+--------------------------------------------------------------------------------
+
+Epoch 87
+
+Train:
+	Average loss: 0.2250
+	Mean error: -0.036
+	Mean absolute error: 24.311
+	Error deviation: 30.748
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.499
+	Mean absolute error: 67.526
+	Error deviation: 71.961
+
+--------------------------------------------------------------------------------
+
+Epoch 88
+
+Train:
+	Average loss: 0.2250
+	Mean error: -0.026
+	Mean absolute error: 24.307
+	Error deviation: 30.747
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.510
+	Mean absolute error: 67.533
+	Error deviation: 71.964
+
+--------------------------------------------------------------------------------
+
+Epoch 89
+
+Train:
+	Average loss: 0.2250
+	Mean error: -0.017
+	Mean absolute error: 24.303
+	Error deviation: 30.745
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.519
+	Mean absolute error: 67.539
+	Error deviation: 71.966
+
+--------------------------------------------------------------------------------
+
+Epoch 90
+
+Train:
+	Average loss: 0.2250
+	Mean error: -0.009
+	Mean absolute error: 24.300
+	Error deviation: 30.743
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.527
+	Mean absolute error: 67.544
+	Error deviation: 71.967
+
+--------------------------------------------------------------------------------
+
+Epoch 91
+
+Train:
+	Average loss: 0.2250
+	Mean error: -0.002
+	Mean absolute error: 24.297
+	Error deviation: 30.742
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.534
+	Mean absolute error: 67.548
+	Error deviation: 71.969
+
+--------------------------------------------------------------------------------
+
+Epoch 92
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.005
+	Mean absolute error: 24.294
+	Error deviation: 30.741
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.540
+	Mean absolute error: 67.552
+	Error deviation: 71.971
+
+--------------------------------------------------------------------------------
+
+Epoch 93
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.012
+	Mean absolute error: 24.292
+	Error deviation: 30.739
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.546
+	Mean absolute error: 67.556
+	Error deviation: 71.972
+
+--------------------------------------------------------------------------------
+
+Epoch 94
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.018
+	Mean absolute error: 24.289
+	Error deviation: 30.738
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.551
+	Mean absolute error: 67.559
+	Error deviation: 71.974
+
+--------------------------------------------------------------------------------
+
+Epoch 95
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.024
+	Mean absolute error: 24.286
+	Error deviation: 30.736
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.556
+	Mean absolute error: 67.563
+	Error deviation: 71.975
+
+--------------------------------------------------------------------------------
+
+Epoch 96
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.030
+	Mean absolute error: 24.284
+	Error deviation: 30.735
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.561
+	Mean absolute error: 67.565
+	Error deviation: 71.976
+
+--------------------------------------------------------------------------------
+
+Epoch 97
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.035
+	Mean absolute error: 24.282
+	Error deviation: 30.734
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.565
+	Mean absolute error: 67.568
+	Error deviation: 71.977
+
+--------------------------------------------------------------------------------
+
+Epoch 98
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.040
+	Mean absolute error: 24.279
+	Error deviation: 30.733
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.568
+	Mean absolute error: 67.570
+	Error deviation: 71.978
+
+--------------------------------------------------------------------------------
+
+Epoch 99
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.045
+	Mean absolute error: 24.277
+	Error deviation: 30.731
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.571
+	Mean absolute error: 67.572
+	Error deviation: 71.979
+
+--------------------------------------------------------------------------------
+
+Epoch 100
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.050
+	Mean absolute error: 24.275
+	Error deviation: 30.730
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.573
+	Mean absolute error: 67.574
+	Error deviation: 71.979
+
+--------------------------------------------------------------------------------
+
+Epoch 101
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.017
+	Mean absolute error: 24.278
+	Error deviation: 30.727
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.583
+	Mean absolute error: 67.579
+	Error deviation: 71.983
+
+--------------------------------------------------------------------------------
+
+Epoch 102
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.018
+	Mean absolute error: 24.278
+	Error deviation: 30.727
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.585
+	Mean absolute error: 67.580
+	Error deviation: 71.983
+
+--------------------------------------------------------------------------------
+
+Epoch 103
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.018
+	Mean absolute error: 24.278
+	Error deviation: 30.727
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.586
+	Mean absolute error: 67.581
+	Error deviation: 71.984
+
+--------------------------------------------------------------------------------
+
+Epoch 104
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.019
+	Mean absolute error: 24.278
+	Error deviation: 30.727
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.588
+	Mean absolute error: 67.582
+	Error deviation: 71.984
+
+--------------------------------------------------------------------------------
+
+Epoch 105
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.019
+	Mean absolute error: 24.278
+	Error deviation: 30.727
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.589
+	Mean absolute error: 67.583
+	Error deviation: 71.984
+
+--------------------------------------------------------------------------------
+
+Epoch 106
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.020
+	Mean absolute error: 24.277
+	Error deviation: 30.727
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.590
+	Mean absolute error: 67.584
+	Error deviation: 71.984
+
+--------------------------------------------------------------------------------
+
+Epoch 107
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.021
+	Mean absolute error: 24.277
+	Error deviation: 30.727
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.592
+	Mean absolute error: 67.584
+	Error deviation: 71.985
+
+--------------------------------------------------------------------------------
+
+Epoch 108
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.021
+	Mean absolute error: 24.277
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.593
+	Mean absolute error: 67.585
+	Error deviation: 71.985
+
+--------------------------------------------------------------------------------
+
+Epoch 109
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.022
+	Mean absolute error: 24.277
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.594
+	Mean absolute error: 67.586
+	Error deviation: 71.985
+
+--------------------------------------------------------------------------------
+
+Epoch 110
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.022
+	Mean absolute error: 24.277
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.595
+	Mean absolute error: 67.587
+	Error deviation: 71.985
+
+--------------------------------------------------------------------------------
+
+Epoch 111
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.022
+	Mean absolute error: 24.277
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.596
+	Mean absolute error: 67.587
+	Error deviation: 71.986
+
+--------------------------------------------------------------------------------
+
+Epoch 112
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.023
+	Mean absolute error: 24.276
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.597
+	Mean absolute error: 67.588
+	Error deviation: 71.986
+
+--------------------------------------------------------------------------------
+
+Epoch 113
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.023
+	Mean absolute error: 24.276
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.598
+	Mean absolute error: 67.589
+	Error deviation: 71.986
+
+--------------------------------------------------------------------------------
+
+Epoch 114
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.024
+	Mean absolute error: 24.276
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.599
+	Mean absolute error: 67.589
+	Error deviation: 71.986
+
+--------------------------------------------------------------------------------
+
+Epoch 115
+
+Train:
+	Average loss: 0.2250
+	Mean error: 0.024
+	Mean absolute error: 24.276
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.600
+	Mean absolute error: 67.590
+	Error deviation: 71.986
+
+--------------------------------------------------------------------------------
+
+Epoch 116
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.024
+	Mean absolute error: 24.276
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.601
+	Mean absolute error: 67.591
+	Error deviation: 71.986
+
+--------------------------------------------------------------------------------
+
+Epoch 117
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.025
+	Mean absolute error: 24.276
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.602
+	Mean absolute error: 67.591
+	Error deviation: 71.987
+
+--------------------------------------------------------------------------------
+
+Epoch 118
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.025
+	Mean absolute error: 24.276
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.603
+	Mean absolute error: 67.592
+	Error deviation: 71.987
+
+--------------------------------------------------------------------------------
+
+Epoch 119
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.025
+	Mean absolute error: 24.276
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.603
+	Mean absolute error: 67.592
+	Error deviation: 71.987
+
+--------------------------------------------------------------------------------
+
+Epoch 120
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.025
+	Mean absolute error: 24.275
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.604
+	Mean absolute error: 67.593
+	Error deviation: 71.987
+
+--------------------------------------------------------------------------------
+
+Epoch 121
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.023
+	Mean absolute error: 24.276
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.605
+	Mean absolute error: 67.593
+	Error deviation: 71.987
+
+--------------------------------------------------------------------------------
+
+Epoch 122
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.023
+	Mean absolute error: 24.276
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.605
+	Mean absolute error: 67.593
+	Error deviation: 71.987
+
+--------------------------------------------------------------------------------
+
+Epoch 123
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.024
+	Mean absolute error: 24.276
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.605
+	Mean absolute error: 67.593
+	Error deviation: 71.987
+
+--------------------------------------------------------------------------------
+
+Epoch 124
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.024
+	Mean absolute error: 24.276
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.605
+	Mean absolute error: 67.593
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 125
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.024
+	Mean absolute error: 24.276
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.606
+	Mean absolute error: 67.593
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 126
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.024
+	Mean absolute error: 24.276
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.606
+	Mean absolute error: 67.594
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 127
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.024
+	Mean absolute error: 24.276
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.606
+	Mean absolute error: 67.594
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 128
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.024
+	Mean absolute error: 24.275
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.606
+	Mean absolute error: 67.594
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 129
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.024
+	Mean absolute error: 24.275
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.607
+	Mean absolute error: 67.594
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 130
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.024
+	Mean absolute error: 24.275
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.607
+	Mean absolute error: 67.594
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 131
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.024
+	Mean absolute error: 24.275
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.607
+	Mean absolute error: 67.594
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 132
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.024
+	Mean absolute error: 24.275
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.607
+	Mean absolute error: 67.594
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 133
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.024
+	Mean absolute error: 24.275
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.607
+	Mean absolute error: 67.594
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 134
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.024
+	Mean absolute error: 24.275
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.608
+	Mean absolute error: 67.595
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 135
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.024
+	Mean absolute error: 24.275
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.608
+	Mean absolute error: 67.595
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 136
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.025
+	Mean absolute error: 24.275
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.608
+	Mean absolute error: 67.595
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 137
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.025
+	Mean absolute error: 24.275
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.608
+	Mean absolute error: 67.595
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 138
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.025
+	Mean absolute error: 24.275
+	Error deviation: 30.726
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.609
+	Mean absolute error: 67.595
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 139
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.025
+	Mean absolute error: 24.275
+	Error deviation: 30.725
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.609
+	Mean absolute error: 67.595
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 140
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.025
+	Mean absolute error: 24.275
+	Error deviation: 30.725
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.609
+	Mean absolute error: 67.595
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 141
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.025
+	Mean absolute error: 24.275
+	Error deviation: 30.725
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.609
+	Mean absolute error: 67.595
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 142
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.025
+	Mean absolute error: 24.275
+	Error deviation: 30.725
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.609
+	Mean absolute error: 67.595
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 143
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.025
+	Mean absolute error: 24.275
+	Error deviation: 30.725
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.609
+	Mean absolute error: 67.595
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 144
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.025
+	Mean absolute error: 24.275
+	Error deviation: 30.725
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.609
+	Mean absolute error: 67.595
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 145
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.025
+	Mean absolute error: 24.275
+	Error deviation: 30.725
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.609
+	Mean absolute error: 67.595
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 146
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.025
+	Mean absolute error: 24.275
+	Error deviation: 30.725
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.609
+	Mean absolute error: 67.596
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 147
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.025
+	Mean absolute error: 24.275
+	Error deviation: 30.725
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.609
+	Mean absolute error: 67.596
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 148
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.025
+	Mean absolute error: 24.275
+	Error deviation: 30.725
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.609
+	Mean absolute error: 67.595
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 149
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.025
+	Mean absolute error: 24.275
+	Error deviation: 30.725
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.609
+	Mean absolute error: 67.595
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+Epoch 150
+
+Train:
+	Average loss: 0.2249
+	Mean error: 0.025
+	Mean absolute error: 24.275
+	Error deviation: 30.725
+Valid:
+	Average loss: 0.3816
+	Mean error: 56.609
+	Mean absolute error: 67.595
+	Error deviation: 71.988
+
+--------------------------------------------------------------------------------
+
+[Training done] Best result: 59.55326121012365, dataset: visdrone, model: UNet++_resnet50

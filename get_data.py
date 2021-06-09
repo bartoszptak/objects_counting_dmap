@@ -59,7 +59,8 @@ def create_hdf5(dataset_name: str,
                 valid_size: int,
                 img_size: Tuple[int, int],
                 in_channels: int=3,
-                whc=False):
+                whc=False,
+                flow=''):
     """
     Create empty training and validation HDF5 files with placeholders
     for images and labels (density maps).
@@ -78,6 +79,9 @@ def create_hdf5(dataset_name: str,
     Returns:
         A tuple of pointers to training and validation HDF5 files.
     """
+
+    if flow != '':
+        dataset_name += f'_{flow}' 
     # create output folder if it does not exist
     os.makedirs(dataset_name, exist_ok=True)
 
@@ -310,7 +314,7 @@ def generate_visdrone_data(sliced=False, flow=''):
                                      valid_size=test_size,
                                      img_size=img_size,
                                      in_channels=in_channels,
-                                     whc=True)
+                                     whc=True, flow = flow)
 
     def warp_flow(img, flow):
         h, w = flow.shape[:2]
