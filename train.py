@@ -68,9 +68,13 @@ def train(dataset_name: str,
     dataset = {}     # training and validation HDF5-based datasets
     dataloader = {}  # training and validation dataloaders
 
+    if flow != '':
+        dataset_name += f'_{flow}' 
+
     for mode in ['train', 'valid']:
         # expected HDF5 files in dataset_name/(train | valid).h5
         data_path = os.path.join(dataset_name, f"{mode}.h5")
+        print(str(data_path))
         # turn on flips only for training dataset
         dataset[mode] = H5Dataset(data_path,
                                   flow = flow,
@@ -136,7 +140,7 @@ def train(dataset_name: str,
     #                            weight_decay=1e-5)
     
     optimizer = torch.optim.Adam(network.parameters())
-    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1) 
+    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.1) 
                                                    #step_size=20,
                                                   
 
@@ -180,7 +184,7 @@ def train(dataset_name: str,
             if mosaic:
                 path += '_mosaic'
             if flow != '':
-                path += '_flow'
+                path += '_flow_{flow}'
             torch.save(network.state_dict(),
                        path+'.pth')
 
