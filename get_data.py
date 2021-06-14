@@ -304,7 +304,7 @@ def generate_visdrone_data(sliced=False, flow=''):
     elif flow == 'dis':
         in_channels = 5
     elif flow == 'dis2':
-        in_channels = 8
+        in_channels = 6
     else:
         in_channels = 3
     
@@ -401,7 +401,7 @@ def generate_visdrone_data(sliced=False, flow=''):
                         image = np.concatenate((
                             image,
                             np.reshape(sub*255., (*image.shape[:2], 1)),
-                            np.reshape(flow_img*255., (*image.shape[:2], 2)),
+                            #np.reshape(flow_img*255., (*image.shape[:2], 2)),
                             np.reshape(ang, (*image.shape[:2], 1)),
                             np.reshape(v, (*image.shape[:2], 1)),
                             ), axis=2)

@@ -40,6 +40,7 @@ from model import UNet, FCRN_A
               help='Number of layers in a convolutional block.')
 @click.option('--plot', is_flag=True, help="Generate a live plot.")
 @click.option('--loss', type=click.Choice(['mse', 'weight']), default='mse')
+@click.option('--opti', type=click.Choice(['sgd', 'adam']), default='')
 @click.option('--flow', type=click.Choice(['', 'median', 'dis', 'dis2']), default='', help='')
 @click.option('-c', '--checkpoint',
               type=click.File('r'),
@@ -60,6 +61,7 @@ def train(dataset_name: str,
           convolutions: int,
           checkpoint: str,
           plot: bool, 
+          opti: str,
           flow: str):
     """Train chosen model on selected dataset."""
     # use GPU if avilable
@@ -90,7 +92,7 @@ def train(dataset_name: str,
     elif flow == 'dis':
         in_channels += 2
     elif flow == 'dis2':
-        in_channels += 5
+        in_channels += 3
 
     # initialize a model based on chosen network_architecture
 
@@ -105,7 +107,7 @@ def train(dataset_name: str,
     elif network_architecture[:5] == 'UNet_':
         network = smp.Unet(encoder_name=network_architecture.split('_')[-1], in_channels=in_channels, classes=1) 
     elif network_architecture[:7] == 'UNet++_':
-        network = smp.UnetPlusPlus(encoder_name=network_architecture.split('_')[-1], in_channels=in_channels, classes=1) 
+        network = smp.UnetPlusPlus(encoder_name=network_architecture.split('_')[-1], in_channels=in_channels, classes=1) #, decoder_attention_type="scse") 
     elif network_architecture[:4] == 'FPN_':
         network = smp.FPN(encoder_name=network_architecture.split('_')[-1], in_channels=in_channels, classes=1) 
     elif network_architecture[:4] == 'PSP_':
@@ -117,7 +119,8 @@ def train(dataset_name: str,
     else:
         raise NotImplementedError
 
-    network = torch.nn.DataParallel(network.to(device))
+    #network = torch.nn.DataParallel(network.to(device))
+    network = network.to(device)
 
     if checkpoint:
         network.load_state_dict(torch.load(checkpoint.name))
@@ -139,7 +142,10 @@ def train(dataset_name: str,
     #                            momentum=0.9,
     #                            weight_decay=1e-5)
     
-    optimizer = torch.optim.SGD(network.parameters(), lr=learning_rate, momentum=0.9, weight_decay=1e-5)
+    if opti == 'sgd':
+        optimizer = torch.optim.SGD(network.parameters(), lr=learning_rate, momentum=0.9, weight_decay=1e-5)
+    elif opti=='adam':
+        optimizer = torch.optim.Adam(network.parameters())
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.1) 
                                                    #step_size=20,
                                                   
@@ -178,13 +184,13 @@ def train(dataset_name: str,
         # update checkpoint if new best is reached
         if result < current_best and not eval:
             current_best = result
-            path = f'{dataset_name}_{network_architecture}'
+            path = f'{dataset_name}_{network_architecture}_{opti}'
             if aug:
                 path += '_aug'
             if mosaic:
                 path += '_mosaic'
             if flow != '':
-                path += '_flow_{flow}'
+                path += f'_flow_{flow}'
             torch.save(network.state_dict(),
                        path+'.pth')
 
