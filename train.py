@@ -4,6 +4,7 @@ from typing import Union, Optional, List
 
 import click
 import torch
+import random
 import numpy as np
 from matplotlib import pyplot
 import segmentation_models_pytorch as smp
@@ -11,6 +12,11 @@ import segmentation_models_pytorch as smp
 from data_loader import H5Dataset
 from looper import Looper
 from model import UNet, FCRN_A
+from CCUNet import CCUNet
+
+random.seed(0)
+np.random.seed(0)
+torch.manual_seed(0)
 
 
 @click.command()
@@ -116,6 +122,8 @@ def train(dataset_name: str,
         network = smp.PSPNet(encoder_name=network_architecture.split('_')[-1], in_channels=in_channels, classes=1)
     elif network_architecture[:14] == 'DeepLabV3Plus_':
         network = smp.PSPNet(encoder_name=network_architecture.split('_')[-1], in_channels=in_channels, classes=1)
+    elif network_architecture[:7] == 'CCUNet_':
+        network = CCUNet(encoder_name=network_architecture.split('_')[-1])
     else:
         raise NotImplementedError
 
@@ -146,6 +154,7 @@ def train(dataset_name: str,
         optimizer = torch.optim.SGD(network.parameters(), lr=learning_rate, momentum=0.9, weight_decay=1e-5)
     elif opti=='adam':
         optimizer = torch.optim.Adam(network.parameters())
+    
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.1) 
                                                    #step_size=20,
                                                   
@@ -159,10 +168,12 @@ def train(dataset_name: str,
 
     # create training and validation Loopers to handle a single epoch
     train_looper = Looper(network, device, loss_fn, optimizer,
-                          dataloader['train'], len(dataset['train']), plots[0])
+                          dataloader['train'], len(dataset['train']), plots[0],
+                          separated=(network_architecture[:7] == 'CCUNet_'))
     valid_looper = Looper(network, device, loss_fn, optimizer,
                           dataloader['valid'], len(dataset['valid']), plots[1],
-                          validation=True, sliced=sliced)
+                          validation=True, sliced=sliced,
+                          separated=(network_architecture[:7] == 'CCUNet_'))
 
     # current best results (lowest mean absolute error on validation set)
     current_best = np.infty

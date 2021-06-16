@@ -18,7 +18,8 @@ class Looper():
                  dataset_size: int,
                  plots: Optional[matplotlib.axes.Axes]=None,
                  validation: bool=False,
-                 sliced: bool=False):
+                 sliced: bool=False,
+                 separated: bool=False):
         """
         Initialize Looper.
 
@@ -43,6 +44,7 @@ class Looper():
         self.sliced = sliced
         self.plots = plots
         self.running_loss = []
+        self.separated = separated
 
     def run(self):
         """Run a single epoch loop.
@@ -68,7 +70,10 @@ class Looper():
                 self.optimizer.zero_grad()
 
             # get model prediction (a density map)
-            out = self.network(image)
+            if self.separated:
+                out = self.network(image[:,:3], image[:,3:])
+            else:
+                out = self.network(image)
                         
             # calculate loss and update running loss
             loss = self.loss(out, gt)

@@ -116,7 +116,8 @@ def infer(image_path: str,
     else:
         raise NotImplementedError
 
-    network = torch.nn.DataParallel(network.to(device))
+    # network = torch.nn.DataParallel()
+    network = network.to(device)
 
     # load provided state dictionary
     # note: by default train.py saves the model in data parallel mode
