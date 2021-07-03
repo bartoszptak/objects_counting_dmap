@@ -409,7 +409,7 @@ def generate_visdrone_data(sliced=False, flow=''):
                         image = np.concatenate((image, np.reshape(flow_img*255., (*image.shape[:2], 2))), axis=2)
 
                     prevgray = gray
-
+                print(sliced, flow, image.shape)
                 if not sliced:
                     image = cv2.resize(image, img_size[::-1])
 
@@ -456,8 +456,8 @@ def generate_visdrone_data(sliced=False, flow=''):
          
     # use first 1500 frames for training and the last 500 for validation
     if sliced:
-        fill_h5(train_h5, train_list, slide=(ys, xs, padding, size, flow))
-        fill_h5(valid_h5, test_list, slide=(ys, xs, padding, size, flow))
+        fill_h5(train_h5, train_list, flow=flow, slide=(ys, xs, padding, size, flow))
+        fill_h5(valid_h5, test_list, flow=flow, slide=(ys, xs, padding, size, flow))
     else:
         fill_h5(train_h5, train_list, flow=flow)
         fill_h5(valid_h5, test_list, flow=flow)
