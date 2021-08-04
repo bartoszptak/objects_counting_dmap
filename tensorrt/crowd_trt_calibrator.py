@@ -64,35 +64,54 @@ In order to prepare data one can use prepare_calibration_data.py script.
 
 
 import os
-import numpy as np
 import cv2
+import numpy as np
 import pycuda.autoinit
 import pycuda.driver as cuda
 import tensorrt as trt
 
-from glob import glob
+from typing import Tuple
 
 
-def _warp_flow(img, flow):
-        h, w = flow.shape[:2]
-        flow = -flow
-        flow[:,:,0] += np.arange(w)
-        flow[:,:,1] += np.arange(h)[:,np.newaxis]
-        res = cv2.remap(img, flow, None, cv2.INTER_LINEAR)
-        return res
+def _preprocess_crowd(img: np.ndarray, input_shape: Tuple[int]=(608,608)) -> np.ndarray:
+    """Preprocess an image without optical flow before TRT crowd inferencing.
+
+    Parameters
+    ----------
+    img : np.ndarray
+        uint8 numpy array.
+    input_shape : Tuple[int], optional
+        Model input size, by default (608,608)
+
+    Returns
+    -------
+    np.ndarray
+        Preprocessed img: float32 numpy array of shape (3, H, W).
+    """    
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    img = cv2.resize(img, (input_shape[1], input_shape[0]))
+    img = img.astype(np.float32) / 255.0
+    return img.transpose((2, 0, 1)).astype(np.float32)
 
 
-def _preprocess_crowd(img, flow_img, input_shape=(608,608)):
-    """Preprocess an image before TRT crowd inferencing.
+def _preprocess_crowd_with_optical_flow(img: np.ndarray, flow_img: np.ndarray, input_shape: Tuple[int]=(608,608)) -> np.ndarray:
+    """Preprocess an image with optical flow before TRT crowd inferencing.
 
-    # Args
-        img: uint8 numpy array of shape either (img_h, img_w, 3)
-             or (img_h, img_w)
-        input_shape: a tuple of (H, W)
+    Parameters
+    ----------
+    img : np.ndarray
+        uint8 numpy array.
+    flow_img : np.ndarray
+        Calculated optical flow for image.
+    input_shape : Tuple[int], optional
+        Model input size, by default (608,608)
 
-    # Returns
-        preprocessed img: float32 numpy array of shape (5, H, W)
-    """
+    Returns
+    -------
+    np.ndarray
+        Preprocessed img: float32 numpy array of shape (5, H, W)
+    """    
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = np.concatenate((img, np.reshape(flow_img*255., (*img.shape[:2], 2))), axis=2)
 
@@ -109,17 +128,18 @@ class CrowdEntropyCalibrator(trt.IInt8EntropyCalibrator2):
     calibration data for crowd models accordingly.
     """
 
-    def __init__(self, img_dir, net_hw, cache_file, batch_size=1):
+    def __init__(self, img_dir, channels, net_hw, cache_file, batch_size=1):
         if not os.path.isdir(img_dir):
             raise FileNotFoundError('%s does not exist' % img_dir)
 
         super().__init__()  # trt.IInt8EntropyCalibrator2.__init__(self)
 
         self.img_dir = img_dir
+        self.channels = channels
         self.net_hw = net_hw
         self.cache_file = cache_file
         self.batch_size = batch_size
-        self.blob_size = 5 * net_hw[0] * net_hw[1] * np.dtype('float32').itemsize * batch_size
+        self.blob_size = self.channels * net_hw[0] * net_hw[1] * np.dtype('float32').itemsize * batch_size
 
         self.inst = cv2.DISOpticalFlow.create(cv2.DISOPTICAL_FLOW_PRESET_MEDIUM)
         self.inst.setUseSpatialPropagation(False)
@@ -148,14 +168,17 @@ class CrowdEntropyCalibrator(trt.IInt8EntropyCalibrator2):
         for i in range(self.batch_size):
             img_path = os.path.join(
                 self.img_dir, self.jpgs[self.current_index + i])
-            flow_path = img_path.replace('imgs', 'imgs_flows').replace('jpg', 'npy')
             img = cv2.imread(img_path)
             assert img is not None, 'failed to read %s' % img_path
 
-            flow_img = np.load(flow_path)
-            assert flow_img is not None, 'failed to read %s' % flow_path
+            if self.channels == 5:
+                flow_path = img_path.replace('imgs', 'imgs_flows').replace('jpg', 'npy')
+                flow_img = np.load(flow_path)
+                assert flow_img is not None, 'failed to read %s' % flow_path
 
-            img = _preprocess_crowd(img, flow_img)
+                img = _preprocess_crowd_with_optical_flow(img, flow_img)
+            else:
+                img = _preprocess_crowd(img)
 
             batch.append(img)
         batch = np.stack(batch)

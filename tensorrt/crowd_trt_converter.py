@@ -33,10 +33,8 @@ def set_net_batch(network, batch_size):
     return network
 
 
-def build_engine(onnx_model_path, img_dir, quant_mode, dla_core, verbose=False):
+def build_engine(onnx_model_path, channels, net_h, net_w, img_dir, quant_mode, dla_core, verbose=False):
     """Build a TensorRT engine from ONNX using the older API."""
-    net_h, net_w = (608,608)
-    channels = 5
 
     print('Loading the ONNX file...')
     onnx_data = load_onnx(onnx_model_path)
@@ -77,7 +75,7 @@ def build_engine(onnx_model_path, img_dir, quant_mode, dla_core, verbose=False):
             from crowd_trt_calibrator import CrowdEntropyCalibrator
             config.set_flag(trt.BuilderFlag.INT8)
             config.int8_calibrator = CrowdEntropyCalibrator(
-                img_dir, (net_h, net_w), onnx_model_path.replace('.onnx', '_calib.bin'))
+                img_dir, channels, (net_h, net_w), onnx_model_path.replace('.onnx', '_calib.bin'))
             config.set_calibration_profile(profile)
         if dla_core >= 0:
             config.default_device_type = trt.DeviceType.DLA
@@ -101,6 +99,15 @@ def main():
         '-m', '--model', type=str, required=True,
         help=('Path to onnx model'))
     parser.add_argument(
+        '-c', '--channels', type=int, default=5,
+        help='Number of channels; 3: RGB input; 5: RGB + optical flow')
+    parser.add_argument(
+        '--net_h', type=int, default=608,
+        help='Network input height')
+    parser.add_argument(
+        '--net_w', type=int, default=608,
+        help='Network input width')
+    parser.add_argument(
         '-i', '--img_dir', type=str,
         help='path to images directory')
     parser.add_argument(
@@ -115,7 +122,7 @@ def main():
     args = parser.parse_args()
 
     engine = build_engine(
-        args.model, args.img_dir, args.quant_mode, args.dla_core, args.verbose)
+        args.model, args.channels, args.net_h, args.net_w, args.img_dir, args.quant_mode, args.dla_core, args.verbose)
     if engine is None:
         raise SystemExit('ERROR: failed to build the TensorRT engine!')
 
