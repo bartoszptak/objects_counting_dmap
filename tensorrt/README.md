@@ -3,6 +3,11 @@ Steps for converting, building, and evaluating TensorRT crowd counting models.
 
 ## PyTorch --> ONNX conversion
 
+PyTorch library contains embedded package for exporting model to ONNX representation. To convert trained crowd models one can use [`pytorch2onnx.py`](./pytorch2onnx.py) converter script as follow:
+
+```bash
+python3 pytorch2onnx.py --checkpoint_path <PATH TO PyTorch CHECKPOINT> --model_architecture <UNet or UNet++> --encoder <ONE OF AVAILABLE ENCODERS> --in_channels <NUMBER OF INPUT CHANNELS> --input_size <SIZE OF INPUT IMAGE>
+```
 
 ## TensorRT engine
 
