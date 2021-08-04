@@ -18,11 +18,12 @@ class HostDeviceMem(object):
         return self.__str__()
 
 class ModelTRT:
-    def __init__(self, config: dict):
+    def __init__(self, config: dict, engine_path='visdrone_unet++_resnet34_11_fp32.trt'):
         self.config = config
 
         self.TRT_LOGGER = trt.Logger()
-        self.engine = self.get_engine('engine.trt')
+        # self.engine = self.get_engine('engine.trt')
+        self.engine = self.get_engine(engine_path)
         self.context = self.engine.create_execution_context()
         #self.buffers = self.allocate_buffers(self.engine, self.batch_size)
 
