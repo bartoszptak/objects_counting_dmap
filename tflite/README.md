@@ -1,6 +1,6 @@
 # TensorFlow Lite
 
-Steps for converting, building, and evaluating TensorRT crowd counting models.
+Steps for converting, building, and evaluating TensorFlow Lite crowd counting models.
 
 ## PyTorch --> ONNX conversion
 
